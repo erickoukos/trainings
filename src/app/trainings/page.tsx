@@ -28,145 +28,121 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-// Mock data - in real app, this would come from API
+// Real upcoming trainings - in production, this would come from API
 const trainings = [
   {
-    id: "1",
-    title: "Advanced AI & Machine Learning",
-    description: "Master cutting-edge AI and ML techniques for real-world applications. Learn from industry experts and build production-ready models.",
-    beginDate: "2024-02-01",
-    endDate: "2024-02-14",
-    trainingType: "ONLINE",
-    isPaid: true,
-    price: 1200,
-    seatsLimit: 25,
-    seatsTaken: 12,
-    category: { name: "AI & ML" },
-    trainer: { name: "Dr. Sarah Chen", avatar: "/avatars/sarah.jpg" },
-    rating: 4.9,
-    reviews: 250,
-    duration: "2 weeks",
-    level: "Advanced",
-    trending: true,
-    new: false,
-    image: "/trainings/ai-ml.jpg"
-  },
-  {
-    id: "2",
-    title: "Cloud DevOps Engineering",
-    description: "Build and deploy scalable applications on AWS, Azure, and GCP. Master containerization, orchestration, and CI/CD pipelines.",
-    beginDate: "2024-02-15",
-    endDate: "2024-02-22",
-    trainingType: "PHYSICAL",
-    isPaid: true,
-    price: 950,
-    seatsLimit: 30,
-    seatsTaken: 8,
-    category: { name: "Cloud Computing" },
-    trainer: { name: "Mike Johnson", avatar: "/avatars/mike.jpg" },
-    rating: 4.8,
-    reviews: 180,
-    duration: "1 week",
-    level: "Intermediate",
-    trending: false,
-    new: true,
-    image: "/trainings/cloud-devops.jpg"
-  },
-  {
-    id: "3",
-    title: "Full-Stack Web Development",
-    description: "Become a versatile developer with our MERN stack bootcamp. Build modern web applications from frontend to backend.",
-    beginDate: "2024-03-01",
-    endDate: "2024-03-08",
+    id: "ai-4-youth",
+    title: "AI-4-YOUTH TRAINING",
+    description: "Youth Empowerment in Artificial Intelligence (AI) Skills for Entrepreneurship. Learn how to leverage AI to start, market, run, and grow your business.",
+    beginDate: "2024-11-10",
+    endDate: "2024-11-14",
     trainingType: "ONLINE",
     isPaid: true,
     price: 1500,
-    seatsLimit: null,
+    seatsLimit: 50,
     seatsTaken: 0,
-    category: { name: "Web Development" },
-    trainer: { name: "Emily Rodriguez", avatar: "/avatars/emily.jpg" },
-    rating: 4.7,
-    reviews: 300,
-    duration: "1 week",
+    category: { name: "AI & Entrepreneurship" },
+    trainer: { name: "Lish AI Labs Team", avatar: "/avatars/lish-team.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "5 Days",
     level: "Beginner",
     trending: true,
-    new: false,
-    image: "/trainings/fullstack.jpg"
+    new: true,
+    image: "/trainings/ai-4-youth.jpg"
   },
   {
-    id: "4",
-    title: "Data Science Fundamentals",
-    description: "Learn data analysis, visualization, and machine learning with Python. Perfect for beginners starting their data science journey.",
-    beginDate: "2024-03-15",
-    endDate: "2024-03-22",
+    id: "ai-4-bodaboda",
+    title: "AI-4-BODABODA TRAINING",
+    description: "Bodaboda Empowerment in Artificial Intelligence (AI) Skills for Entrepreneurship. Specialized training for bodaboda operators to learn AI skills for business growth.",
+    beginDate: "2024-11-10",
+    endDate: "2024-11-14",
     trainingType: "ONLINE",
-    isPaid: false,
-    price: null,
-    seatsLimit: 50,
-    seatsTaken: 23,
-    category: { name: "Data Science" },
-    trainer: { name: "Dr. Alex Kumar", avatar: "/avatars/alex.jpg" },
-    rating: 4.6,
-    reviews: 98,
-    duration: "1 week",
+    isPaid: true,
+    price: 500,
+    seatsLimit: 30,
+    seatsTaken: 0,
+    category: { name: "AI & Entrepreneurship" },
+    trainer: { name: "Lish AI Labs Team", avatar: "/avatars/lish-team.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "5 Days",
     level: "Beginner",
+    trending: true,
+    new: true,
+    image: "/trainings/ai-4-bodaboda.jpg"
+  },
+  {
+    id: "ai-masterclass",
+    title: "AI Masterclass",
+    description: "From FOUNDATIONAL PRINCIPLES to PROFESSIONAL MASTERY. Comprehensive AI masterclass covering foundational principles to professional mastery.",
+    beginDate: "2024-11-03",
+    endDate: "2024-11-10",
+    trainingType: "ONLINE",
+    isPaid: true,
+    price: 0, // Contact for pricing
+    seatsLimit: 25,
+    seatsTaken: 0,
+    category: { name: "AI & Machine Learning" },
+    trainer: { name: "Lish AI Labs Experts", avatar: "/avatars/lish-experts.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "Intensive Program",
+    level: "Advanced",
+    trending: true,
+    new: true,
+    image: "/trainings/ai-masterclass.jpg"
+  },
+  {
+    id: "data-science",
+    title: "Data Science Fundamentals",
+    description: "Comprehensive data analysis and machine learning with Python. Master data science fundamentals with hands-on programming.",
+    beginDate: "2024-12-01",
+    endDate: "2024-12-28",
+    trainingType: "HYBRID",
+    isPaid: true,
+    price: 0, // Contact for pricing
+    seatsLimit: 20,
+    seatsTaken: 0,
+    category: { name: "Data Science" },
+    trainer: { name: "Lish AI Labs Data Team", avatar: "/avatars/lish-data.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "4 Weeks",
+    level: "Intermediate",
     trending: false,
     new: true,
     image: "/trainings/data-science.jpg"
   },
   {
-    id: "5",
-    title: "Cybersecurity Fundamentals",
-    description: "Essential cybersecurity concepts, threat analysis, and security best practices for organizations.",
-    beginDate: "2024-04-01",
-    endDate: "2024-04-15",
+    id: "dahua-surveillance",
+    title: "Dahua Surveillance Technology",
+    description: "Professional surveillance systems and security technology training. Comprehensive training on Dahua surveillance technology.",
+    beginDate: "2024-12-15",
+    endDate: "2024-12-29",
     trainingType: "PHYSICAL",
     isPaid: true,
-    price: 2000,
-    seatsLimit: 20,
-    seatsTaken: 5,
-    category: { name: "Cybersecurity" },
-    trainer: { name: "David Lee", avatar: "/avatars/david.jpg" },
-    rating: 4.9,
-    reviews: 75,
-    duration: "2 weeks",
+    price: 0, // Contact for pricing
+    seatsLimit: 15,
+    seatsTaken: 0,
+    category: { name: "Security Technology" },
+    trainer: { name: "Lish AI Labs Security Team", avatar: "/avatars/lish-security.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "2 Weeks",
     level: "Intermediate",
     trending: false,
-    new: false,
-    image: "/trainings/cybersecurity.jpg"
-  },
-  {
-    id: "6",
-    title: "Advanced JavaScript & React",
-    description: "Deep dive into modern JavaScript, React hooks, context API, and performance optimization techniques.",
-    beginDate: "2024-04-20",
-    endDate: "2024-05-05",
-    trainingType: "ONLINE",
-    isPaid: true,
-    price: 1000,
-    seatsLimit: 40,
-    seatsTaken: 30,
-    category: { name: "Web Development" },
-    trainer: { name: "Sarah Wilson", avatar: "/avatars/sarah-w.jpg" },
-    rating: 4.8,
-    reviews: 110,
-    duration: "2.5 weeks",
-    level: "Advanced",
-    trending: true,
-    new: false,
-    image: "/trainings/javascript-react.jpg"
+    new: true,
+    image: "/trainings/dahua-surveillance.jpg"
   }
 ];
 
 const categories = [
   "All Categories",
-  "AI & ML", 
-  "Web Development", 
+  "AI & Entrepreneurship", 
+  "AI & Machine Learning", 
   "Data Science", 
-  "Cloud Computing", 
-  "Cybersecurity",
-  "Mobile Development",
-  "DevOps"
+  "Security Technology"
 ];
 
 const levels = ["All Levels", "Beginner", "Intermediate", "Advanced"];
@@ -514,7 +490,7 @@ export default function TrainingsPage() {
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div>
                         <span className="text-2xl font-bold text-gradient-primary">
-                          {training.isPaid ? `$${training.price?.toLocaleString()}` : "Free"}
+                          {training.isPaid ? (training.price === 0 ? "Contact for Pricing" : `KSH ${training.price?.toLocaleString()}`) : "Free"}
                         </span>
                       </div>
                       <Link href={`/trainings/${training.id}`}>
@@ -594,7 +570,7 @@ export default function TrainingsPage() {
                         <div className="flex flex-col items-end gap-4">
                           <div className="text-right">
                             <div className="text-2xl font-bold text-gradient-primary">
-                              {training.isPaid ? `$${training.price?.toLocaleString()}` : "Free"}
+                              {training.isPaid ? (training.price === 0 ? "Contact for Pricing" : `KSH ${training.price?.toLocaleString()}`) : "Free"}
                             </div>
                           </div>
                           <Link href={`/trainings/${training.id}`}>
