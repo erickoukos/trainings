@@ -110,7 +110,7 @@ export default function PartnersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [filterType, setFilterType] = useState("All");
   const [showAddForm, setShowAddForm] = useState(false);
-  const [editingPartner, setEditingPartner] = useState(null);
+  const [editingPartner, setEditingPartner] = useState<any>(null);
   const router = useRouter();
 
   useEffect(() => {
