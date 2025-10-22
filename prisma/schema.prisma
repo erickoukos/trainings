@@ -1,15 +1,185 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  applications Application[]
+  completedTrainings CompletedTraining[]
+
+  @@map("users")
+}
+
+model Trainer {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  phone      String?
+  password   String
+  categoryId String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  category   Category @relation(fields: [categoryId], references: [id])
+  trainings  Training[]
+  reports    Report[]
+
+  @@map("trainers")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  trainers  Trainer[]
+  trainings Training[]
+
+  @@map("categories")
+}
+
+model Training {
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  beginDate     DateTime
+  endDate       DateTime
+  requirements  String
+  eligibility   String
+  isCertified   Boolean       @default(false)
+  trainingType  TrainingType
+  onlineLink    String?
+  location      String?
+  locationPin   String?
+  hasSeatsLimit Boolean       @default(false)
+  seatsLimit    Int?
+  seatsTaken    Int           @default(0)
+  isPaid        Boolean       @default(false)
+  price         Decimal?      @db.Decimal(10, 2)
+  usePaystack   Boolean       @default(false)
+  isActive      Boolean       @default(true)
+  featuredImage String?
+  slug          String        @unique
+  trainerId     String?
+  categoryId    String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  trainer      Trainer?       @relation(fields: [trainerId], references: [id])
+  category     Category       @relation(fields: [categoryId], references: [id])
+  applications Application[]
+  completedTrainings CompletedTraining[]
+  reports      Report[]
+
+  @@map("trainings")
+}
+
+model Application {
+  id         String            @id @default(cuid())
+  trainingId String
+  userId     String?
+  name       String
+  email      String
+  phone      String
+  message    String?
+  status     ApplicationStatus @default(PENDING)
+  feedback   String?
+  rating     Int?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  // Relations
+  training Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id])
+
+  @@map("applications")
+}
+
+model CompletedTraining {
+  id         String   @id @default(cuid())
+  trainingId String
+  userId     String
+  completedAt DateTime @default(now())
+
+  // Relations
+  training Training @relation(fields: [trainingId], references: [id])
+  user     User     @relation(fields: [userId], references: [id])
+
+  @@unique([trainingId, userId])
+  @@map("completed_trainings")
+}
+
+model Report {
+  id            String   @id @default(cuid())
+  trainerId     String
+  trainingId    String
+  area          String
+  topic         String
+  date          DateTime
+  location      String
+  contactPerson String
+  maleCount     Int
+  femaleCount   Int
+  successes     String
+  challenges    String
+  recommendations String
+  expenses      Decimal? @db.Decimal(10, 2)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  trainer  Trainer  @relation(fields: [trainerId], references: [id])
+  training Training @relation(fields: [trainingId], references: [id])
+
+  @@map("reports")
+}
+
+model Setting {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  value     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// Enums
+enum UserRole {
+  ADMIN
+  TRAINER
+  USER
+}
+
+enum TrainingType {
+  ONLINE
+  PHYSICAL
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
 }
