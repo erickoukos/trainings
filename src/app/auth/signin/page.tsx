@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react";
-import { signIn, getSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -25,24 +24,21 @@ export default function SignInPage() {
     setError("");
 
     try {
-      const result = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (result?.error) {
-        setError("Invalid credentials. Please check your email and password.");
+      const data = await response.json();
+
+      if (data.success) {
+        // Redirect based on user role
+        router.push(data.redirect);
       } else {
-        // Check user role and redirect accordingly
-        const session = await getSession();
-        if (session?.user?.role === "ADMIN") {
-          router.push("/admin/dashboard");
-        } else if (session?.user?.role === "TRAINER") {
-          router.push("/trainer/dashboard");
-        } else {
-          router.push("/");
-        }
+        setError(data.error || "Invalid credentials. Please check your email and password.");
       }
     } catch (error) {
       setError("An error occurred. Please try again.");

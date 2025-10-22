@@ -1,8 +1,7 @@
 "use client"
 
-import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -98,17 +97,41 @@ const upcomingTrainings = [
 ];
 
 export default function AdminDashboard() {
-  const { data: session, status } = useSession();
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "loading") return;
-    if (!session || session.user?.role !== "ADMIN") {
-      router.push("/auth/signin");
-    }
-  }, [session, status, router]);
+    // Check for session
+    const checkSession = async () => {
+      try {
+        const response = await fetch('/api/auth/me');
+        if (response.ok) {
+          const data = await response.json();
+          if (data.user.role === 'ADMIN') {
+            setUser(data.user);
+          } else {
+            router.push('/auth/signin');
+          }
+        } else {
+          router.push('/auth/signin');
+        }
+      } catch {
+        router.push('/auth/signin');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (status === "loading") {
+    checkSession();
+  }, [router]);
+
+  const handleSignOut = async () => {
+    await fetch('/api/auth/signout', { method: 'POST' });
+    router.push('/');
+  };
+
+  if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-indigo-600"></div>
@@ -116,7 +139,7 @@ export default function AdminDashboard() {
     );
   }
 
-  if (!session || session.user?.role !== "ADMIN") {
+  if (!user) {
     return null;
   }
 
@@ -145,15 +168,15 @@ export default function AdminDashboard() {
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center">
                   <span className="text-sm font-medium text-indigo-600">
-                    {session.user?.name?.charAt(0)}
+                    {user.name?.charAt(0)}
                   </span>
                 </div>
-                <span className="text-sm text-gray-600">{session.user?.name}</span>
+                <span className="text-sm text-gray-600">{user.name}</span>
               </div>
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => router.push("/api/auth/signout")}
+                onClick={handleSignOut}
               >
                 Sign Out
               </Button>
