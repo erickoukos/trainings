@@ -97,7 +97,7 @@ const upcomingTrainings = [
 ];
 
 export default function AdminDashboard() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<{name?: string; email?: string; role?: string} | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
