@@ -6,8 +6,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -76,7 +76,7 @@ model Training {
   seatsLimit    Int?
   seatsTaken    Int           @default(0)
   isPaid        Boolean       @default(false)
-  price         Decimal?      @db.Decimal(10, 2)
+  price         Float?
   usePaystack   Boolean       @default(false)
   isActive      Boolean       @default(true)
   featuredImage String?
@@ -145,7 +145,7 @@ model Report {
   successes     String
   challenges    String
   recommendations String
-  expenses      Decimal? @db.Decimal(10, 2)
+  expenses      Float?
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
