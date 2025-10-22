@@ -134,31 +134,31 @@ export function Features() {
           <h3 className="text-2xl font-semibold text-foreground mb-8">
             Trusted by Leading Organizations
           </h3>
-          <div className="flex flex-wrap justify-center items-center gap-8 opacity-70">
-            {/* Partner Logos */}
+          <div className="flex flex-wrap justify-center items-center gap-12 opacity-90">
+            {/* Partner Logos - Larger and Clearer */}
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="flex items-center justify-center w-24 h-16 bg-white rounded-lg shadow-sm p-2"
+              whileHover={{ scale: 1.15 }}
+              className="flex items-center justify-center w-32 h-20 bg-white rounded-xl shadow-lg p-4 border border-gray-100"
             >
-              <img src="/google.png" alt="Google" className="max-h-12 object-contain" />
+              <img src="/google.png" alt="Google" className="max-h-16 object-contain" />
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="flex items-center justify-center w-24 h-16 bg-white rounded-lg shadow-sm p-2"
+              whileHover={{ scale: 1.15 }}
+              className="flex items-center justify-center w-32 h-20 bg-white rounded-xl shadow-lg p-4 border border-gray-100"
             >
-              <img src="/SAF-MAIN-LOGO.png" alt="Safaricom" className="max-h-12 object-contain" />
+              <img src="/SAF-MAIN-LOGO.png" alt="Safaricom" className="max-h-16 object-contain" />
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="flex items-center justify-center w-24 h-16 bg-white rounded-lg shadow-sm p-2"
+              whileHover={{ scale: 1.15 }}
+              className="flex items-center justify-center w-32 h-20 bg-white rounded-xl shadow-lg p-4 border border-gray-100"
             >
-              <img src="/SimbaAI.jpg" alt="Simba AI" className="max-h-12 object-contain" />
+              <img src="/SimbaAI.jpg" alt="Simba AI" className="max-h-16 object-contain" />
             </motion.div>
             <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="flex items-center justify-center w-24 h-16 bg-white rounded-lg shadow-sm p-2"
+              whileHover={{ scale: 1.15 }}
+              className="flex items-center justify-center w-32 h-20 bg-white rounded-xl shadow-lg p-4 border border-gray-100"
             >
-              <img src="/ACAT-logo2.png" alt="ACAT" className="max-h-12 object-contain" />
+              <img src="/ACAT-logo2.png" alt="ACAT" className="max-h-16 object-contain" />
             </motion.div>
           </div>
         </motion.div>

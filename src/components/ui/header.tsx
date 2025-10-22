@@ -51,7 +51,7 @@ export function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+                className="text-sm font-medium text-white/90 hover:text-white transition-colors duration-200"
               >
                 {item.label}
               </Link>
@@ -102,7 +102,7 @@ export function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-200"
+                    className="text-sm font-medium text-white/90 hover:text-white transition-colors duration-200"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
                     {item.label}

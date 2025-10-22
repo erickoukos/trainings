@@ -337,7 +337,7 @@ export default function UpcomingTrainingsPage() {
                           </p>
                         </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                           <Link href={`/trainings/${training.id}`}>
                             <Button className="w-full bg-gradient-primary hover:opacity-90 text-white">
                               <BookOpen className="h-4 w-4 mr-2" />

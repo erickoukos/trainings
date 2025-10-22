@@ -383,7 +383,7 @@ export default function TrainingDetailPage({ params }: { params: { id: string } 
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
+                  <div className="flex gap-6">
                     <Button 
                       onClick={() => setShowApplicationForm(true)}
                       className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3"
