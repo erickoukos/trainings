@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Brain, Zap } from "lucide-react";
+import Image from "next/image";
 
 interface LogoProps {
   className?: string;
@@ -22,12 +22,13 @@ export function Logo({ className, size = "md", variant = "full" }: LogoProps) {
 
   if (variant === "icon") {
     return (
-      <div className={cn("flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg", sizeClasses[size], className)}>
-        <div className="relative">
-          <Brain className="h-1/2 w-1/2 text-white" />
-          <Zap className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
-        </div>
-      </div>
+      <Image 
+        src="/logo.png" 
+        alt="Lish AI Labs" 
+        width={32} 
+        height={32} 
+        className={cn("rounded-lg object-contain", className)}
+      />
     );
   }
 
@@ -43,12 +44,13 @@ export function Logo({ className, size = "md", variant = "full" }: LogoProps) {
 
   return (
     <div className={cn("flex items-center space-x-3", className)}>
-      <div className={cn("flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg", sizeClasses[size])}>
-        <div className="relative">
-          <Brain className="h-1/2 w-1/2 text-white" />
-          <Zap className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
-        </div>
-      </div>
+      <Image 
+        src="/logo.png" 
+        alt="Lish AI Labs" 
+        width={32} 
+        height={32} 
+        className={cn("rounded-lg object-contain", sizeClasses[size])}
+      />
       <div className="flex flex-col">
         <span className={cn("font-display font-bold text-gradient-primary", textSizeClasses[size])}>
           Lish AI Labs

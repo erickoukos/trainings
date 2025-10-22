@@ -14,6 +14,11 @@ export const metadata: Metadata = {
   description: "Transform your career with cutting-edge AI training programs. Expert-led courses, industry certifications, and hands-on projects designed by Lish AI Labs professionals.",
   keywords: "AI training, machine learning, data science, professional development, Lish AI Labs",
   authors: [{ name: "Lish AI Labs" }],
+  icons: {
+    icon: "/logo.png",
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
   openGraph: {
     title: "Lish AI Labs - Professional AI Training Platform",
     description: "Transform your career with cutting-edge AI training programs",
