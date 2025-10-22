@@ -51,27 +51,13 @@ export async function POST(request: NextRequest) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create user with enhanced profile data
+    // Create user with basic information
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        role: "USER",
-        // Store additional profile information in a JSON field or separate table
-        // For now, we'll store it as metadata
-        phone: phone || null,
-        address: address || null,
-        city: city || null,
-        country: country || null,
-        occupation: occupation || null,
-        experience: experience || null,
-        education: education || null,
-        trainingInterests: trainingInterests ? JSON.stringify(trainingInterests) : null,
-        preferredFormat: preferredFormat || null,
-        agreeToMarketing: agreeToMarketing || false,
-        createdAt: new Date(),
-        updatedAt: new Date()
+        role: "USER"
       }
     });
 
