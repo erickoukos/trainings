@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -337,15 +338,19 @@ export default function UpcomingTrainingsPage() {
                         </div>
 
                         <div className="space-y-3">
-                          <Button className="w-full bg-gradient-primary hover:opacity-90 text-white">
-                            <BookOpen className="h-4 w-4 mr-2" />
-                            Apply Now
-                            <ArrowRight className="h-4 w-4 ml-2" />
-                          </Button>
-                          <Button variant="outline" className="w-full">
-                            <ExternalLink className="h-4 w-4 mr-2" />
-                            Learn More
-                          </Button>
+                          <Link href={`/trainings/${training.id}`}>
+                            <Button className="w-full bg-gradient-primary hover:opacity-90 text-white">
+                              <BookOpen className="h-4 w-4 mr-2" />
+                              Apply Now
+                              <ArrowRight className="h-4 w-4 ml-2" />
+                            </Button>
+                          </Link>
+                          <Link href={`/trainings/${training.id}`}>
+                            <Button variant="outline" className="w-full">
+                              <ExternalLink className="h-4 w-4 mr-2" />
+                              Learn More
+                            </Button>
+                          </Link>
                         </div>
                       </div>
 
