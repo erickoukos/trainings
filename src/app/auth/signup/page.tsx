@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
 import { Logo } from "@/components/ui/logo";
 import { 
   ArrowLeft, 
@@ -21,19 +22,68 @@ import {
   Brain,
   Users,
   Award,
-  ArrowRight
+  ArrowRight,
+  Phone,
+  MapPin,
+  Calendar,
+  GraduationCap,
+  Shield,
+  Zap,
+  Star,
+  Globe,
+  Target
 } from "lucide-react";
 import Link from "next/link";
 
+const steps = [
+  { id: 1, title: "Personal Info", description: "Basic information" },
+  { id: 2, title: "Contact Details", description: "How to reach you" },
+  { id: 3, title: "Professional Info", description: "Your background" },
+  { id: 4, title: "Preferences", description: "Training interests" },
+  { id: 5, title: "Review & Submit", description: "Final confirmation" }
+];
+
+const trainingInterests = [
+  { id: "ai-youth", name: "AI-4-YOUTH TRAINING", description: "Youth empowerment in AI skills", icon: Brain },
+  { id: "ai-bodaboda", name: "AI-4-BODABODA TRAINING", description: "Bodaboda AI entrepreneurship", icon: Users },
+  { id: "ai-masterclass", name: "AI Masterclass", description: "Advanced AI principles", icon: Award },
+  { id: "data-science", name: "Data Science", description: "Python and machine learning", icon: Target },
+  { id: "surveillance", name: "Dahua Surveillance", description: "Security technology training", icon: Shield }
+];
+
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
+    // Step 1: Personal Info
     firstName: "",
     lastName: "",
+    dateOfBirth: "",
+    gender: "",
+    
+    // Step 2: Contact Details
     email: "",
+    phone: "",
+    address: "",
+    city: "",
+    country: "Kenya",
+    
+    // Step 3: Professional Info
+    occupation: "",
+    experience: "",
+    education: "",
+    currentCompany: "",
+    
+    // Step 4: Preferences
+    trainingInterests: [] as string[],
+    preferredFormat: "",
+    timeZone: "EAT",
+    
+    // Step 5: Account
     password: "",
     confirmPassword: "",
     agreeToTerms: false,
+    agreeToMarketing: false,
   });
+  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -41,30 +91,39 @@ export default function SignUpPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const router = useRouter();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: type === 'checkbox' ? checked : value
-    }));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = (e.target as HTMLInputElement).checked;
+    
+    if (name === "trainingInterests") {
+      const interests = formData.trainingInterests.includes(value)
+        ? formData.trainingInterests.filter(interest => interest !== value)
+        : [...formData.trainingInterests, value];
+      setFormData(prev => ({ ...prev, trainingInterests: interests }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+    }
+  };
+
+  const handleNext = () => {
+    if (currentStep < 5) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setLoading(false);
-      return;
-    }
-
-    if (!formData.agreeToTerms) {
-      setError("Please agree to the terms and conditions");
-      setLoading(false);
-      return;
-    }
 
     try {
       const response = await fetch('/api/auth/signup', {
@@ -76,15 +135,26 @@ export default function SignUpPage() {
           name: `${formData.firstName} ${formData.lastName}`,
           email: formData.email,
           password: formData.password,
+          phone: formData.phone,
+          address: formData.address,
+          city: formData.city,
+          country: formData.country,
+          occupation: formData.occupation,
+          experience: formData.experience,
+          education: formData.education,
+          trainingInterests: formData.trainingInterests,
+          preferredFormat: formData.preferredFormat,
+          agreeToTerms: formData.agreeToTerms,
+          agreeToMarketing: formData.agreeToMarketing,
         }),
       });
 
       const data = await response.json();
 
       if (data.success) {
-        router.push('/auth/signin?message=Account created successfully. Please sign in.');
+        router.push("/auth/signin?message=Registration successful! Please sign in.");
       } else {
-        setError(data.error || "An error occurred. Please try again.");
+        setError(data.error || "Registration failed. Please try again.");
       }
     } catch (error) {
       setError("An error occurred. Please try again.");
@@ -93,375 +163,483 @@ export default function SignUpPage() {
     }
   };
 
-  const features = [
-    { icon: Brain, text: "AI-Powered Learning" },
-    { icon: Users, text: "Expert Instructors" },
-    { icon: Award, text: "Industry Certifications" }
-  ];
+  const renderStepContent = () => {
+    switch (currentStep) {
+      case 1:
+        return (
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="firstName">First Name *</Label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="lastName">Last Name *</Label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="dateOfBirth">Date of Birth</Label>
+              <Input
+                id="dateOfBirth"
+                name="dateOfBirth"
+                type="date"
+                value={formData.dateOfBirth}
+                onChange={handleInputChange}
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="gender">Gender</Label>
+              <select
+                id="gender"
+                name="gender"
+                value={formData.gender}
+                onChange={handleInputChange}
+                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Gender</option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+                <option value="prefer-not-to-say">Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+        );
 
-  const steps = [
-    { number: 1, title: "Personal Info", description: "Tell us about yourself" },
-    { number: 2, title: "Account Setup", description: "Create your credentials" },
-    { number: 3, title: "Get Started", description: "Complete your profile" }
-  ];
+      case 2:
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label htmlFor="email">Email Address *</Label>
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                required
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="phone">Phone Number *</Label>
+              <Input
+                id="phone"
+                name="phone"
+                type="tel"
+                value={formData.phone}
+                onChange={handleInputChange}
+                placeholder="+254 700 000 000"
+                required
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="address">Address</Label>
+              <textarea
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                rows={3}
+                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="city">City</Label>
+                <Input
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleInputChange}
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label htmlFor="country">Country</Label>
+                <Input
+                  id="country"
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  className="mt-1"
+                />
+              </div>
+            </div>
+          </div>
+        );
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50">
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-10 p-6">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <ArrowLeft className="h-5 w-5 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">Back to Home</span>
-          </Link>
-          <Logo size="sm" />
-        </div>
-      </div>
+      case 3:
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label htmlFor="occupation">Current Occupation *</Label>
+              <Input
+                id="occupation"
+                name="occupation"
+                value={formData.occupation}
+                onChange={handleInputChange}
+                required
+                className="mt-1"
+              />
+            </div>
+            
+            <div>
+              <Label htmlFor="experience">Years of Experience</Label>
+              <select
+                id="experience"
+                name="experience"
+                value={formData.experience}
+                onChange={handleInputChange}
+                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Experience Level</option>
+                <option value="0-1">0-1 years</option>
+                <option value="2-3">2-3 years</option>
+                <option value="4-5">4-5 years</option>
+                <option value="6-10">6-10 years</option>
+                <option value="10+">10+ years</option>
+              </select>
+            </div>
+            
+            <div>
+              <Label htmlFor="education">Highest Education Level</Label>
+              <select
+                id="education"
+                name="education"
+                value={formData.education}
+                onChange={handleInputChange}
+                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Education Level</option>
+                <option value="high-school">High School</option>
+                <option value="diploma">Diploma</option>
+                <option value="bachelor">Bachelor's Degree</option>
+                <option value="master">Master's Degree</option>
+                <option value="phd">PhD</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            
+            <div>
+              <Label htmlFor="currentCompany">Current Company/Organization</Label>
+              <Input
+                id="currentCompany"
+                name="currentCompany"
+                value={formData.currentCompany}
+                onChange={handleInputChange}
+                className="mt-1"
+              />
+            </div>
+          </div>
+        );
 
-      <div className="flex min-h-screen">
-        {/* Left Side - Form */}
-        <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="w-full max-w-md"
-          >
-            <Card className="border-0 shadow-xl">
-              <CardHeader className="text-center pb-8">
-                <motion.div
-                  initial={{ scale: 0.8 }}
-                  animate={{ scale: 1 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                >
-                  <Logo size="lg" className="mx-auto mb-4" />
-                </motion.div>
-                <CardTitle className="text-2xl font-display font-bold text-foreground">
-                  Create Your Account
-                </CardTitle>
-                <CardDescription className="text-muted-foreground">
-                  Join thousands of professionals advancing their AI skills
-                </CardDescription>
-              </CardHeader>
-              
-              <CardContent>
-                {/* Progress Steps */}
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="mb-8"
-                >
-                  <div className="flex items-center justify-between">
-                    {steps.map((step, index) => (
-                      <div key={step.number} className="flex items-center">
-                        <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
-                          currentStep >= step.number 
-                            ? 'bg-primary text-white' 
-                            : 'bg-muted text-muted-foreground'
-                        }`}>
-                          {currentStep > step.number ? <CheckCircle className="h-4 w-4" /> : step.number}
-                        </div>
-                        {index < steps.length - 1 && (
-                          <div className={`flex-1 h-0.5 mx-4 ${
-                            currentStep > step.number ? 'bg-primary' : 'bg-muted'
-                          }`} />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-
-                {error && (
+      case 4:
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label>Training Interests *</Label>
+              <p className="text-sm text-gray-600 mb-4">Select the training programs you're interested in:</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {trainingInterests.map((interest) => (
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="mb-6"
+                    key={interest.id}
+                    whileHover={{ scale: 1.02 }}
+                    className={`p-4 border-2 rounded-lg cursor-pointer transition-all duration-200 ${
+                      formData.trainingInterests.includes(interest.id)
+                        ? 'border-blue-500 bg-blue-50'
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                    onClick={() => handleInputChange({
+                      target: { name: 'trainingInterests', value: interest.id }
+                    } as any)}
                   >
-                    <Alert variant="destructive">
-                      <AlertDescription>{error}</AlertDescription>
-                    </Alert>
-                  </motion.div>
-                )}
-
-                <form onSubmit={handleSubmit} className="space-y-6">
-                  {/* Step 1: Personal Information */}
-                  {currentStep === 1 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="space-y-4"
-                    >
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="firstName" className="text-sm font-medium">
-                            First Name
-                          </Label>
-                          <div className="relative mt-2">
-                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="firstName"
-                              name="firstName"
-                              type="text"
-                              placeholder="John"
-                              value={formData.firstName}
-                              onChange={handleInputChange}
-                              className="pl-10"
-                              required
-                            />
-                          </div>
-                        </div>
-                        <div>
-                          <Label htmlFor="lastName" className="text-sm font-medium">
-                            Last Name
-                          </Label>
-                          <div className="relative mt-2">
-                            <User className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              id="lastName"
-                              name="lastName"
-                              type="text"
-                              placeholder="Doe"
-                              value={formData.lastName}
-                              onChange={handleInputChange}
-                              className="pl-10"
-                              required
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Step 2: Account Setup */}
-                  {currentStep === 2 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="space-y-4"
-                    >
+                    <div className="flex items-center space-x-3">
+                      <interest.icon className="h-6 w-6 text-blue-600" />
                       <div>
-                        <Label htmlFor="email" className="text-sm font-medium">
-                          Email Address
-                        </Label>
-                        <div className="relative mt-2">
-                          <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="email"
-                            name="email"
-                            type="email"
-                            placeholder="john@example.com"
-                            value={formData.email}
-                            onChange={handleInputChange}
-                            className="pl-10"
-                            required
-                          />
-                        </div>
+                        <h3 className="font-semibold text-gray-900">{interest.name}</h3>
+                        <p className="text-sm text-gray-600">{interest.description}</p>
                       </div>
-                      <div>
-                        <Label htmlFor="password" className="text-sm font-medium">
-                          Password
-                        </Label>
-                        <div className="relative mt-2">
-                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="password"
-                            name="password"
-                            type={showPassword ? "text" : "password"}
-                            placeholder="Create a strong password"
-                            value={formData.password}
-                            onChange={handleInputChange}
-                            className="pl-10 pr-10"
-                            required
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                          >
-                            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          </button>
-                        </div>
-                      </div>
-                      <div>
-                        <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                          Confirm Password
-                        </Label>
-                        <div className="relative mt-2">
-                          <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            type={showConfirmPassword ? "text" : "password"}
-                            placeholder="Confirm your password"
-                            value={formData.confirmPassword}
-                            onChange={handleInputChange}
-                            className="pl-10 pr-10"
-                            required
-                          />
-                          <button
-                            type="button"
-                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                          >
-                            {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                          </button>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Step 3: Terms and Conditions */}
-                  {currentStep === 3 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.4 }}
-                      className="space-y-4"
-                    >
-                      <div className="flex items-start space-x-3">
-                        <input
-                          id="agreeToTerms"
-                          name="agreeToTerms"
-                          type="checkbox"
-                          checked={formData.agreeToTerms}
-                          onChange={handleInputChange}
-                          className="mt-1 h-4 w-4 text-primary border-gray-300 rounded focus:ring-primary"
-                          required
-                        />
-                        <div className="text-sm text-muted-foreground">
-                          <Label htmlFor="agreeToTerms" className="cursor-pointer">
-                            I agree to the{" "}
-                            <Link href="/terms" className="text-primary hover:underline">
-                              Terms of Service
-                            </Link>{" "}
-                            and{" "}
-                            <Link href="/privacy" className="text-primary hover:underline">
-                              Privacy Policy
-                            </Link>
-                          </Label>
-                        </div>
-                      </div>
-                    </motion.div>
-                  )}
-
-                  {/* Navigation Buttons */}
-                  <div className="flex justify-between">
-                    {currentStep > 1 && (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setCurrentStep(currentStep - 1)}
-                      >
-                        <ArrowLeft className="h-4 w-4 mr-2" />
-                        Previous
-                      </Button>
-                    )}
-                    
-                    {currentStep < 3 ? (
-                      <Button
-                        type="button"
-                        onClick={() => setCurrentStep(currentStep + 1)}
-                        className="ml-auto bg-gradient-primary hover:opacity-90 text-white"
-                      >
-                        Next
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    ) : (
-                      <Button
-                        type="submit"
-                        className="ml-auto bg-gradient-primary hover:opacity-90 text-white"
-                        disabled={loading}
-                      >
-                        {loading ? "Creating Account..." : "Create Account"}
-                      </Button>
-                    )}
-                  </div>
-                </form>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.8 }}
-                  className="mt-6 text-center"
-                >
-                  <p className="text-sm text-muted-foreground">
-                    Already have an account?{" "}
-                    <Link href="/auth/signin" className="text-primary hover:underline font-medium">
-                      Sign in
-                    </Link>
-                  </p>
-                </motion.div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        {/* Right Side - Branding */}
-        <div className="hidden lg:flex lg:flex-1 bg-gradient-primary relative overflow-hidden">
-          <div className="absolute inset-0 bg-black/20" />
-          <div className="relative z-10 flex flex-col justify-center px-12 text-white">
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-            >
-              <h2 className="text-4xl font-display font-bold mb-6">
-                Start Your AI Journey
-              </h2>
-              <p className="text-xl text-white/90 mb-8">
-                Join our community of AI professionals and unlock your potential 
-                with world-class training programs and industry certifications.
-              </p>
-              
-              <div className="space-y-4">
-                {features.map((feature, index) => (
-                  <motion.div
-                    key={feature.text}
-                    initial={{ opacity: 0, x: 30 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
-                    className="flex items-center space-x-3"
-                  >
-                    <div className="flex-shrink-0 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
-                      <feature.icon className="h-4 w-4" />
                     </div>
-                    <span className="text-white/90">{feature.text}</span>
                   </motion.div>
                 ))}
               </div>
-            </motion.div>
-
-            {/* Floating Elements */}
-            <motion.div
-              className="absolute top-20 right-20 w-32 h-32 bg-white/10 rounded-full blur-xl"
-              animate={{
-                y: [0, -20, 0],
-                x: [0, 10, 0],
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-            <motion.div
-              className="absolute bottom-20 left-20 w-24 h-24 bg-white/10 rounded-full blur-xl"
-              animate={{
-                y: [0, 20, 0],
-                x: [0, -10, 0],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
+            </div>
+            
+            <div>
+              <Label htmlFor="preferredFormat">Preferred Training Format</Label>
+              <select
+                id="preferredFormat"
+                name="preferredFormat"
+                value={formData.preferredFormat}
+                onChange={handleInputChange}
+                className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="">Select Preferred Format</option>
+                <option value="online">Online</option>
+                <option value="physical">Physical/In-person</option>
+                <option value="hybrid">Hybrid (Online + Physical)</option>
+                <option value="flexible">Flexible</option>
+              </select>
+            </div>
           </div>
-        </div>
-      </div>
+        );
+
+      case 5:
+        return (
+          <div className="space-y-6">
+            <div>
+              <Label htmlFor="password">Password *</Label>
+              <div className="relative mt-1">
+                <Input
+                  id="password"
+                  name="password"
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+            
+            <div>
+              <Label htmlFor="confirmPassword">Confirm Password *</Label>
+              <div className="relative mt-1">
+                <Input
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showConfirmPassword ? "text" : "password"}
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="agreeToTerms"
+                  name="agreeToTerms"
+                  checked={formData.agreeToTerms}
+                  onChange={handleInputChange}
+                  required
+                  className="mt-1"
+                />
+                <Label htmlFor="agreeToTerms" className="text-sm">
+                  I agree to the <Link href="/terms" className="text-blue-600 hover:underline">Terms of Service</Link> and <Link href="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link> *
+                </Label>
+              </div>
+              
+              <div className="flex items-start space-x-3">
+                <input
+                  type="checkbox"
+                  id="agreeToMarketing"
+                  name="agreeToMarketing"
+                  checked={formData.agreeToMarketing}
+                  onChange={handleInputChange}
+                  className="mt-1"
+                />
+                <Label htmlFor="agreeToMarketing" className="text-sm">
+                  I would like to receive updates about new training programs and AI industry insights
+                </Label>
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        className="w-full max-w-4xl"
+      >
+        <Card className="shadow-2xl border-0 overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px]">
+            {/* Left Side - Form */}
+            <div className="p-8 lg:p-12">
+              <div className="mb-8">
+                <Link href="/" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
+                  <ArrowLeft className="h-4 w-4 mr-2" />
+                  Back to Home
+                </Link>
+                <Logo />
+                <h1 className="text-3xl font-bold text-gray-900 mt-4">Join Lish AI Labs</h1>
+                <p className="text-gray-600 mt-2">Create your account to access world-class AI training programs</p>
+              </div>
+
+              {/* Progress Steps */}
+              <div className="mb-8">
+                <div className="flex items-center justify-between">
+                  {steps.map((step, index) => (
+                    <div key={step.id} className="flex items-center">
+                      <div className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium ${
+                        currentStep >= step.id
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-600'
+                      }`}>
+                        {currentStep > step.id ? <CheckCircle className="h-4 w-4" /> : step.id}
+                      </div>
+                      {index < steps.length - 1 && (
+                        <div className={`w-16 h-1 mx-2 ${
+                          currentStep > step.id ? 'bg-blue-600' : 'bg-gray-200'
+                        }`} />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <div className="flex justify-between mt-2">
+                  {steps.map((step) => (
+                    <div key={step.id} className="text-center">
+                      <p className="text-xs font-medium text-gray-600">{step.title}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {error && (
+                <Alert className="mb-6">
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
+              )}
+
+              <form onSubmit={handleSubmit}>
+                <div className="mb-8">
+                  {renderStepContent()}
+                </div>
+
+                <div className="flex justify-between">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handlePrevious}
+                    disabled={currentStep === 1}
+                    className="flex items-center"
+                  >
+                    <ArrowLeft className="h-4 w-4 mr-2" />
+                    Previous
+                  </Button>
+                  
+                  {currentStep < 5 ? (
+                    <Button
+                      type="button"
+                      onClick={handleNext}
+                      className="flex items-center"
+                    >
+                      Next
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
+                  ) : (
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="flex items-center bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    >
+                      {loading ? (
+                        <>
+                          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                          Creating Account...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          Create Account
+                        </>
+                      )}
+                    </Button>
+                  )}
+                </div>
+              </form>
+
+              <p className="text-center text-sm text-gray-600 mt-6">
+                Already have an account?{" "}
+                <Link href="/auth/signin" className="text-blue-600 hover:text-blue-700 font-medium">
+                  Sign in here
+                </Link>
+              </p>
+            </div>
+
+            {/* Right Side - Benefits */}
+            <div className="bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 p-8 lg:p-12 text-white relative overflow-hidden">
+              <div className="absolute inset-0 bg-black/20"></div>
+              <div className="relative z-10">
+                <h2 className="text-3xl font-bold mb-6">Why Join Lish AI Labs?</h2>
+                <div className="space-y-6">
+                  {[
+                    { icon: Brain, title: "Expert-Led Training", description: "Learn from industry professionals with real-world experience" },
+                    { icon: Award, title: "Industry Certifications", description: "Earn recognized certificates that boost your career" },
+                    { icon: Users, title: "Global Community", description: "Connect with AI professionals worldwide" },
+                    { icon: Target, title: "Practical Skills", description: "Hands-on projects and real-world applications" },
+                    { icon: Shield, title: "Quality Assurance", description: "Rigorous quality standards and continuous improvement" }
+                  ].map((benefit, index) => (
+                    <motion.div
+                      key={benefit.title}
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="flex items-start space-x-4"
+                    >
+                      <div className="flex-shrink-0">
+                        <benefit.icon className="h-6 w-6 text-cyan-300" />
+                      </div>
+                      <div>
+                        <h3 className="font-semibold text-lg">{benefit.title}</h3>
+                        <p className="text-blue-100">{benefit.description}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </motion.div>
     </div>
   );
 }

@@ -9,16 +9,23 @@ import Link from "next/link";
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Animated Background */}
+      {/* AI Background Images */}
       <div className="absolute inset-0 bg-gradient-hero">
-        <div className="absolute inset-0 bg-black/20" />
+        {/* AI Neural Network Background */}
+        <div className="absolute inset-0 opacity-20">
+          <div className="absolute inset-0 bg-[url('/ai-neural-network.jpg')] bg-cover bg-center bg-no-repeat" />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-purple-900/80 to-indigo-900/80" />
+        </div>
+        
+        {/* Animated AI Elements */}
         <div className="absolute inset-0">
-          {/* Floating Elements */}
+          {/* Neural Network Nodes */}
           <motion.div
-            className="absolute top-20 left-10 w-20 h-20 bg-white/10 rounded-full blur-xl"
+            className="absolute top-20 left-10 w-20 h-20 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full blur-xl opacity-60"
             animate={{
               y: [0, -20, 0],
               x: [0, 10, 0],
+              scale: [1, 1.2, 1],
             }}
             transition={{
               duration: 6,
@@ -27,10 +34,11 @@ export function Hero() {
             }}
           />
           <motion.div
-            className="absolute top-40 right-20 w-32 h-32 bg-purple-500/20 rounded-full blur-xl"
+            className="absolute top-40 right-20 w-32 h-32 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full blur-xl opacity-40"
             animate={{
               y: [0, 20, 0],
               x: [0, -10, 0],
+              scale: [1, 1.3, 1],
             }}
             transition={{
               duration: 8,
@@ -39,13 +47,40 @@ export function Hero() {
             }}
           />
           <motion.div
-            className="absolute bottom-20 left-1/4 w-16 h-16 bg-blue-500/20 rounded-full blur-xl"
+            className="absolute bottom-20 left-1/4 w-16 h-16 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full blur-xl opacity-50"
             animate={{
               y: [0, -15, 0],
               x: [0, 15, 0],
+              scale: [1, 1.1, 1],
             }}
             transition={{
               duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+          
+          {/* AI Circuit Patterns */}
+          <motion.div
+            className="absolute top-1/4 right-1/4 w-24 h-24 border-2 border-cyan-400/30 rounded-lg rotate-45"
+            animate={{
+              rotate: [45, 405, 45],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+          <motion.div
+            className="absolute bottom-1/3 left-1/3 w-20 h-20 border-2 border-purple-400/30 rounded-full"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.7, 0.3],
+            }}
+            transition={{
+              duration: 5,
               repeat: Infinity,
               ease: "easeInOut",
             }}
@@ -70,40 +105,44 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
-          className="text-responsive-xl font-display font-bold text-white mb-6"
+          className="text-5xl md:text-7xl font-display font-bold text-white mb-6 leading-tight"
         >
           Master AI & Machine Learning with
           <br />
-          <span className="text-gradient-secondary">Expert-Led Training</span>
+          <span className="text-gradient-secondary bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 bg-clip-text text-transparent">
+            Expert-Led Training
+          </span>
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-xl text-white/90 mb-8 max-w-3xl mx-auto"
+          className="text-xl md:text-2xl text-white/90 mb-8 max-w-4xl mx-auto leading-relaxed"
         >
-          Transform your career with cutting-edge AI training programs. Learn from industry experts, 
-          build real-world projects, and earn industry-recognized certifications.
+          Transform your career with cutting-edge AI training programs from Lish AI Labs. 
+          Learn from industry experts, build real-world projects, and earn industry-recognized certifications.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+          className="flex flex-col sm:flex-row gap-6 justify-center mb-12"
         >
           <Link href="/trainings">
-            <Button size="lg" className="bg-white text-gray-900 hover:bg-white/90 text-lg px-8 py-4">
-              <Brain className="h-5 w-5 mr-2" />
-              Explore Programs
-              <ArrowRight className="h-5 w-5 ml-2" />
+            <Button size="lg" className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white text-lg px-10 py-4 rounded-full shadow-2xl hover:shadow-blue-500/25 transition-all duration-300 transform hover:scale-105">
+              <Brain className="h-6 w-6 mr-3" />
+              Explore AI Programs
+              <ArrowRight className="h-6 w-6 ml-3" />
             </Button>
           </Link>
-          <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10 text-lg px-8 py-4">
-            <Play className="h-5 w-5 mr-2" />
-            Watch Demo
-          </Button>
+          <Link href="/trainings/upcoming">
+            <Button size="lg" variant="outline" className="border-2 border-white/30 text-white hover:bg-white/10 hover:border-white/50 text-lg px-10 py-4 rounded-full backdrop-blur-sm transition-all duration-300">
+              <Zap className="h-6 w-6 mr-3" />
+              Upcoming Trainings
+            </Button>
+          </Link>
         </motion.div>
 
         {/* Stats */}
@@ -111,25 +150,26 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 1 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto"
+          className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto"
         >
           {[
-            { number: "500+", label: "AI Programs" },
-            { number: "10K+", label: "Professionals Trained" },
-            { number: "50+", label: "Expert Instructors" },
-            { number: "95%", label: "Success Rate" },
+            { number: "5+", label: "AI Training Programs", icon: Brain },
+            { number: "500+", label: "Professionals Trained", icon: Zap },
+            { number: "10+", label: "Expert Instructors", icon: Sparkles },
+            { number: "98%", label: "Success Rate", icon: ArrowRight },
           ].map((stat, index) => (
             <motion.div
               key={stat.label}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 1.2 + index * 0.1 }}
-              className="text-center"
+              className="text-center glass p-6 rounded-2xl backdrop-blur-sm border border-white/20"
             >
+              <stat.icon className="h-8 w-8 text-cyan-400 mx-auto mb-3" />
               <div className="text-3xl md:text-4xl font-bold text-white mb-2">
                 {stat.number}
               </div>
-              <div className="text-sm text-white/80">{stat.label}</div>
+              <div className="text-sm text-white/80 font-medium">{stat.label}</div>
             </motion.div>
           ))}
         </motion.div>

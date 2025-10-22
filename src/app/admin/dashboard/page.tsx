@@ -35,108 +35,119 @@ import {
   Star,
   AlertCircle,
   CheckCircle,
-  XCircle
+  XCircle,
+  Zap,
+  Brain,
+  Globe,
+  Shield,
+  TrendingDown,
+  ArrowUp,
+  ArrowDown,
+  RefreshCw
 } from "lucide-react";
 import Link from "next/link";
 import { getClientSession } from "@/lib/client-session";
 
-// Mock data - in real app, this would come from API
+// Enhanced mock data with realistic Lish AI Labs metrics
 const stats = {
-  totalTrainings: 24,
-  activeTrainings: 18,
-  totalUsers: 156,
+  totalTrainings: 5,
+  activeTrainings: 4,
+  totalUsers: 500,
   totalApplications: 89,
   pendingApplications: 12,
   completedTrainings: 6,
   totalRevenue: 450000,
   thisMonthRevenue: 125000,
   growthRate: 15.3,
-  completionRate: 87.5
+  completionRate: 98.5,
+  averageRating: 4.8,
+  newUsersThisMonth: 45
 };
 
 const recentApplications = [
   {
     id: "1",
-    name: "John Doe",
+    name: "John Mwangi",
     email: "john@example.com",
-    training: "Advanced AI & Machine Learning",
+    training: "AI-4-YOUTH TRAINING",
     status: "PENDING",
     date: "2024-01-15",
-    phone: "+234 801 234 5678",
-    avatar: "JD"
+    phone: "+254 701 234 567",
+    avatar: "JM",
+    amount: 1500
   },
   {
     id: "2",
-    name: "Jane Smith",
+    name: "Jane Wanjiku",
     email: "jane@example.com",
-    training: "Cloud DevOps Engineering",
+    training: "AI-4-BODABODA TRAINING",
     status: "APPROVED",
     date: "2024-01-14",
-    phone: "+234 802 345 6789",
-    avatar: "JS"
+    phone: "+254 702 345 678",
+    avatar: "JW",
+    amount: 500
   },
   {
     id: "3",
-    name: "Mike Johnson",
+    name: "Mike Otieno",
     email: "mike@example.com",
-    training: "Data Science Fundamentals",
+    training: "AI Masterclass",
     status: "PENDING",
     date: "2024-01-13",
-    phone: "+234 803 456 7890",
-    avatar: "MJ"
+    phone: "+254 703 456 789",
+    avatar: "MO",
+    amount: 0
   },
   {
     id: "4",
-    name: "Sarah Wilson",
+    name: "Sarah Akinyi",
     email: "sarah@example.com",
-    training: "Full-Stack Web Development",
+    training: "Data Science Fundamentals",
     status: "APPROVED",
     date: "2024-01-12",
-    phone: "+234 804 567 8901",
-    avatar: "SW"
+    phone: "+254 704 567 890",
+    avatar: "SA",
+    amount: 0
   }
 ];
 
 const upcomingTrainings = [
   {
     id: "1",
-    title: "Advanced AI & Machine Learning",
-    date: "Tomorrow, 10:00 AM",
+    title: "AI-4-YOUTH TRAINING",
+    date: "2024-11-10",
     participants: 25,
-    type: "Online",
-    instructor: "Dr. Sarah Chen"
+    maxParticipants: 50,
+    status: "ACTIVE",
+    revenue: 37500
   },
   {
     id: "2",
-    title: "Cloud DevOps Engineering",
-    date: "Friday, 2:00 PM",
-    participants: 18,
-    type: "Physical",
-    instructor: "Mike Johnson"
+    title: "AI-4-BODABODA TRAINING",
+    date: "2024-11-10",
+    participants: 15,
+    maxParticipants: 30,
+    status: "ACTIVE",
+    revenue: 7500
   },
   {
     id: "3",
-    title: "Data Science Bootcamp",
-    date: "Next Monday, 9:00 AM",
-    participants: 30,
-    type: "Online",
-    instructor: "Dr. Alex Kumar"
+    title: "AI Masterclass",
+    date: "2024-11-03",
+    participants: 8,
+    maxParticipants: 25,
+    status: "ACTIVE",
+    revenue: 0
   }
 ];
 
-const revenueData = [
-  { month: "Jan", revenue: 45000 },
-  { month: "Feb", revenue: 52000 },
-  { month: "Mar", revenue: 48000 },
-  { month: "Apr", revenue: 61000 },
-  { month: "May", revenue: 55000 },
-  { month: "Jun", revenue: 67000 }
-];
-
-const applicationStatusData = [
-  { status: "Approved", count: 45, percentage: 50.6 },
-  { status: "Pending", count: 28, percentage: 31.5 },
-  { status: "Rejected", count: 16, percentage: 18.0 }
+const quickActions = [
+  { title: "Create Training", icon: Plus, href: "/admin/trainings/create", color: "bg-blue-500" },
+  { title: "View Applications", icon: FileText, href: "/admin/applications", color: "bg-green-500" },
+  { title: "Manage Users", icon: Users, href: "/admin/users", color: "bg-purple-500" },
+  { title: "Generate Report", icon: BarChart3, href: "/admin/reports", color: "bg-orange-500" },
+  { title: "Manage Partners", icon: Globe, href: "/admin/partners", color: "bg-cyan-500" },
+  { title: "Settings", icon: Settings, href: "/admin/settings", color: "bg-gray-500" }
 ];
 
 export default function AdminDashboard() {
@@ -164,36 +175,34 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-background">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-foreground">Loading dashboard...</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Admin Header */}
-      <header className="bg-white/80 backdrop-blur-sm shadow-sm border-b sticky top-0 z-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="bg-white/80 backdrop-blur-md border-b border-gray-200/50 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
-            <div className="flex items-center space-x-3">
-              <Logo size="md" />
+            <div className="flex items-center space-x-4">
+              <Logo />
               <div>
-                <h1 className="text-xl font-bold text-foreground">Admin Dashboard</h1>
-                <p className="text-sm text-muted-foreground">Welcome back, {user?.name || user?.email}</p>
+                <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+                <p className="text-sm text-gray-600">Welcome back, {user?.name || user?.email}</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="sm" className="relative">
                 <Bell className="h-5 w-5" />
+                <span className="absolute -top-1 -right-1 h-3 w-3 bg-red-500 rounded-full"></span>
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="sm">
                 <Settings className="h-5 w-5" />
               </Button>
-              <Button onClick={handleSignOut} variant="outline" className="text-red-600 hover:text-red-700">
+              <Button onClick={handleSignOut} variant="outline" size="sm">
                 Sign Out
               </Button>
             </div>
@@ -201,292 +210,238 @@ export default function AdminDashboard() {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-        {/* Stats Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Stats Overview */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8"
         >
-          <Card className="hover-lift border-0 shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Trainings</CardTitle>
-              <BookOpen className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stats.totalTrainings}</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">+{stats.activeTrainings}</span> active
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-lift border-0 shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Users</CardTitle>
-              <Users className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stats.totalUsers}</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">+{stats.growthRate}%</span> this month
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-lift border-0 shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Applications</CardTitle>
-              <FileText className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">{stats.totalApplications}</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-yellow-600">{stats.pendingApplications}</span> pending
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card className="hover-lift border-0 shadow-md">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
-              <DollarSign className="h-4 w-4 text-primary" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-foreground">${stats.totalRevenue.toLocaleString()}</div>
-              <p className="text-xs text-muted-foreground">
-                <span className="text-green-600">${stats.thisMonthRevenue.toLocaleString()}</span> this month
-              </p>
-            </CardContent>
-          </Card>
-        </motion.div>
-
-        {/* Charts and Analytics */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Revenue Chart */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-          >
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  Revenue Trends
-                </CardTitle>
-                <CardDescription>Monthly revenue over the last 6 months</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64 flex items-end justify-between space-x-2">
-                  {revenueData.map((data, index) => (
-                    <div key={data.month} className="flex flex-col items-center space-y-2">
-                      <div 
-                        className="bg-gradient-primary rounded-t w-8 transition-all duration-500 hover:opacity-80"
-                        style={{ height: `${(data.revenue / 70000) * 200}px` }}
-                      />
-                      <span className="text-xs text-muted-foreground">{data.month}</span>
-                      <span className="text-xs font-medium">${(data.revenue / 1000).toFixed(0)}k</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          {/* Application Status Chart */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-          >
-            <Card className="border-0 shadow-md">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="h-5 w-5 text-primary" />
-                  Application Status
-                </CardTitle>
-                <CardDescription>Distribution of application statuses</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {applicationStatusData.map((item, index) => (
-                    <div key={item.status} className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`w-3 h-3 rounded-full ${
-                          item.status === 'Approved' ? 'bg-green-500' :
-                          item.status === 'Pending' ? 'bg-yellow-500' : 'bg-red-500'
-                        }`} />
-                        <span className="text-sm font-medium">{item.status}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-muted-foreground">{item.count}</span>
-                        <span className="text-sm font-medium">{item.percentage}%</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        {/* Recent Applications & Upcoming Trainings */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Recent Applications */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
-          >
-            <Card className="border-0 shadow-md">
-              <CardHeader className="flex flex-row items-center justify-between">
+          <Card className="bg-gradient-to-br from-blue-500 to-blue-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Recent Applications</CardTitle>
-                  <CardDescription>Latest applications for your training programs</CardDescription>
+                  <p className="text-blue-100 text-sm font-medium">Total Revenue</p>
+                  <p className="text-3xl font-bold">KSH {stats.totalRevenue.toLocaleString()}</p>
+                  <div className="flex items-center mt-2">
+                    <ArrowUp className="h-4 w-4 text-green-300 mr-1" />
+                    <span className="text-green-300 text-sm">+{stats.growthRate}%</span>
+                  </div>
                 </div>
-                <Link href="/admin/applications">
-                  <Button variant="outline" size="sm">
-                    View All
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {recentApplications.map((app) => (
-                    <div key={app.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
-                          {app.avatar}
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{app.name}</p>
-                          <p className="text-xs text-muted-foreground">{app.training}</p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge 
-                          variant={app.status === "PENDING" ? "secondary" : "default"} 
-                          className={
-                            app.status === "PENDING" 
-                              ? "bg-yellow-100 text-yellow-800" 
-                              : app.status === "APPROVED"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }
-                        >
-                          {app.status === "PENDING" && <Clock className="h-3 w-3 mr-1" />}
-                          {app.status === "APPROVED" && <CheckCircle className="h-3 w-3 mr-1" />}
-                          {app.status === "REJECTED" && <XCircle className="h-3 w-3 mr-1" />}
-                          {app.status}
-                        </Badge>
-                        <Button variant="ghost" size="sm">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
+                <DollarSign className="h-12 w-12 text-blue-200" />
+              </div>
+            </CardContent>
+          </Card>
 
-          {/* Upcoming Trainings */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
-            <Card className="border-0 shadow-md">
-              <CardHeader className="flex flex-row items-center justify-between">
+          <Card className="bg-gradient-to-br from-green-500 to-green-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
                 <div>
-                  <CardTitle>Upcoming Trainings</CardTitle>
-                  <CardDescription>Trainings scheduled for the near future</CardDescription>
+                  <p className="text-green-100 text-sm font-medium">Active Trainings</p>
+                  <p className="text-3xl font-bold">{stats.activeTrainings}</p>
+                  <div className="flex items-center mt-2">
+                    <Activity className="h-4 w-4 text-green-300 mr-1" />
+                    <span className="text-green-300 text-sm">Running</span>
+                  </div>
                 </div>
-                <Link href="/admin/trainings">
-                  <Button variant="outline" size="sm">
-                    View All
-                    <ArrowRight className="h-4 w-4 ml-2" />
-                  </Button>
-                </Link>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {upcomingTrainings.map((training) => (
-                    <div key={training.id} className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-secondary rounded-full flex items-center justify-center text-white">
-                          <GraduationCap className="h-5 w-5" />
-                        </div>
-                        <div>
-                          <p className="font-medium text-sm">{training.title}</p>
-                          <p className="text-xs text-muted-foreground">
-                            <Calendar className="h-3 w-3 inline mr-1" />
-                            {training.date}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs">
-                          {training.type}
-                        </Badge>
-                        <span className="text-xs text-muted-foreground">
-                          {training.participants} enrolled
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+                <BookOpen className="h-12 w-12 text-green-200" />
+              </div>
+            </CardContent>
+          </Card>
 
-        {/* Quick Actions */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 1 }}
-        >
-          <Card className="border-0 shadow-md">
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-              <CardDescription>Common administrative tasks</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <Link href="/admin/trainings/create">
-                  <Button className="w-full bg-gradient-primary hover:opacity-90 text-white py-6 text-lg">
-                    <Plus className="h-6 w-6 mr-3" />
-                    Create Training
-                  </Button>
-                </Link>
-                <Link href="/admin/applications">
-                  <Button className="w-full bg-gradient-secondary hover:opacity-90 text-white py-6 text-lg">
-                    <UserCheck className="h-6 w-6 mr-3" />
-                    Review Applications
-                  </Button>
-                </Link>
-                <Link href="/admin/reports">
-                  <Button className="w-full bg-gradient-accent hover:opacity-90 text-white py-6 text-lg">
-                    <BarChart3 className="h-6 w-6 mr-3" />
-                    View Reports
-                  </Button>
-                </Link>
-                <Link href="/admin/partners">
-                  <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:opacity-90 text-white py-6 text-lg">
-                    <Users className="h-6 w-6 mr-3" />
-                    Manage Partners
-                  </Button>
-                </Link>
+          <Card className="bg-gradient-to-br from-purple-500 to-purple-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-purple-100 text-sm font-medium">Total Users</p>
+                  <p className="text-3xl font-bold">{stats.totalUsers}</p>
+                  <div className="flex items-center mt-2">
+                    <Users className="h-4 w-4 text-purple-300 mr-1" />
+                    <span className="text-purple-300 text-sm">+{stats.newUsersThisMonth} this month</span>
+                  </div>
+                </div>
+                <Users className="h-12 w-12 text-purple-200" />
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-br from-orange-500 to-orange-600 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-orange-100 text-sm font-medium">Applications</p>
+                  <p className="text-3xl font-bold">{stats.totalApplications}</p>
+                  <div className="flex items-center mt-2">
+                    <AlertCircle className="h-4 w-4 text-orange-300 mr-1" />
+                    <span className="text-orange-300 text-sm">{stats.pendingApplications} pending</span>
+                  </div>
+                </div>
+                <FileText className="h-12 w-12 text-orange-200" />
               </div>
             </CardContent>
           </Card>
         </motion.div>
-      </main>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Quick Actions */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="lg:col-span-1"
+          >
+            <Card className="shadow-lg border-0">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <Zap className="h-5 w-5 mr-2 text-blue-600" />
+                  Quick Actions
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-3">
+                {quickActions.map((action, index) => (
+                  <Link key={action.title} href={action.href}>
+                    <motion.div
+                      whileHover={{ scale: 1.02, x: 5 }}
+                      className="flex items-center p-3 rounded-lg hover:bg-gray-50 transition-all duration-200 cursor-pointer"
+                    >
+                      <div className={`p-2 rounded-lg ${action.color} text-white mr-3`}>
+                        <action.icon className="h-4 w-4" />
+                      </div>
+                      <span className="font-medium text-gray-700">{action.title}</span>
+                      <ArrowRight className="h-4 w-4 ml-auto text-gray-400" />
+                    </motion.div>
+                  </Link>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {/* Recent Applications */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="lg:col-span-2"
+          >
+            <Card className="shadow-lg border-0">
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle className="flex items-center">
+                    <FileText className="h-5 w-5 mr-2 text-green-600" />
+                    Recent Applications
+                  </CardTitle>
+                  <Link href="/admin/applications">
+                    <Button variant="outline" size="sm">
+                      View All
+                      <ArrowRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </Link>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {recentApplications.map((application, index) => (
+                    <motion.div
+                      key={application.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3, delay: index * 0.1 }}
+                      className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
+                          {application.avatar}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-gray-900">{application.name}</p>
+                          <p className="text-sm text-gray-600">{application.training}</p>
+                          <p className="text-xs text-gray-500">{application.date}</p>
+                        </div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Badge 
+                          variant={application.status === "APPROVED" ? "default" : "secondary"}
+                          className={application.status === "APPROVED" ? "bg-green-100 text-green-800" : "bg-yellow-100 text-yellow-800"}
+                        >
+                          {application.status}
+                        </Badge>
+                        <div className="text-right">
+                          <p className="text-sm font-medium text-gray-900">
+                            {application.amount > 0 ? `KSH ${application.amount}` : "Contact for pricing"}
+                          </p>
+                        </div>
+                        <Button variant="ghost" size="sm">
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </motion.div>
+        </div>
+
+        {/* Upcoming Trainings */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
+          className="mt-8"
+        >
+          <Card className="shadow-lg border-0">
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+                Upcoming Trainings
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {upcomingTrainings.map((training, index) => (
+                  <motion.div
+                    key={training.id}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, delay: index * 0.1 }}
+                    className="p-6 bg-gradient-to-br from-white to-gray-50 rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-300"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-semibold text-gray-900">{training.title}</h3>
+                      <Badge className="bg-green-100 text-green-800">
+                        {training.status}
+                      </Badge>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Calendar className="h-4 w-4 mr-2" />
+                        {new Date(training.date).toLocaleDateString()}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Users className="h-4 w-4 mr-2" />
+                        {training.participants}/{training.maxParticipants} participants
+                      </div>
+                      <div className="flex items-center text-sm text-gray-600">
+                        <DollarSign className="h-4 w-4 mr-2" />
+                        Revenue: KSH {training.revenue.toLocaleString()}
+                      </div>
+                    </div>
+                    <div className="mt-4">
+                      <div className="w-full bg-gray-200 rounded-full h-2">
+                        <div 
+                          className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                          style={{ width: `${(training.participants / training.maxParticipants) * 100}%` }}
+                        ></div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </motion.div>
+      </div>
     </div>
   );
 }
