@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { Brain, Zap } from "lucide-react";
 
 interface LogoProps {
   className?: string;
@@ -21,14 +22,11 @@ export function Logo({ className, size = "md", variant = "full" }: LogoProps) {
 
   if (variant === "icon") {
     return (
-      <div className={cn("flex items-center justify-center rounded-lg bg-gradient-primary", sizeClasses[size], className)}>
-        <svg
-          className="h-1/2 w-1/2 text-white"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
+      <div className={cn("flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg", sizeClasses[size], className)}>
+        <div className="relative">
+          <Brain className="h-1/2 w-1/2 text-white" />
+          <Zap className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+        </div>
       </div>
     );
   }
@@ -45,14 +43,11 @@ export function Logo({ className, size = "md", variant = "full" }: LogoProps) {
 
   return (
     <div className={cn("flex items-center space-x-3", className)}>
-      <div className={cn("flex items-center justify-center rounded-lg bg-gradient-primary", sizeClasses[size])}>
-        <svg
-          className="h-1/2 w-1/2 text-white"
-          fill="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
+      <div className={cn("flex items-center justify-center rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg", sizeClasses[size])}>
+        <div className="relative">
+          <Brain className="h-1/2 w-1/2 text-white" />
+          <Zap className="h-3 w-3 text-yellow-400 absolute -top-1 -right-1 animate-pulse" />
+        </div>
       </div>
       <div className="flex flex-col">
         <span className={cn("font-display font-bold text-gradient-primary", textSizeClasses[size])}>

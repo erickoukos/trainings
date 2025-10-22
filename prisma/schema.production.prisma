@@ -1,0 +1,180 @@
+// Production Prisma schema for PostgreSQL
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String
+  role      UserRole @default(USER)
+  isActive  Boolean  @default(true)
+  
+  // Enhanced profile fields
+  phone             String?
+  address           String?
+  city              String?
+  country           String?
+  occupation        String?
+  experience        String?
+  education         String?
+  trainingInterests String? // JSON string of interests
+  preferredFormat   String?
+  agreeToMarketing  Boolean @default(false)
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  applications Application[]
+  completedTrainings CompletedTraining[]
+
+  @@map("users")
+}
+
+model Trainer {
+  id         String   @id @default(cuid())
+  name       String
+  email      String   @unique
+  phone      String?
+  password   String
+  categoryId String
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relations
+  category   Category @relation(fields: [categoryId], references: [id])
+  trainings  Training[]
+  reports    Report[]
+
+  @@map("trainers")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  trainers  Trainer[]
+  trainings Training[]
+
+  @@map("categories")
+}
+
+model Training {
+  id            String        @id @default(cuid())
+  title         String
+  description   String
+  beginDate     DateTime
+  endDate       DateTime
+  requirements  String
+  eligibility   String
+  isCertified   Boolean       @default(false)
+  trainingType  TrainingType
+  onlineLink    String?
+  location      String?
+  locationPin   String?
+  hasSeatsLimit Boolean       @default(false)
+  seatsLimit    Int?
+  seatsTaken    Int           @default(0)
+  isPaid        Boolean       @default(false)
+  price         Float?
+  usePaystack   Boolean       @default(false)
+  isActive      Boolean       @default(true)
+  featuredImage String?
+  slug          String        @unique
+  trainerId     String?
+  categoryId    String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  // Relations
+  trainer      Trainer?       @relation(fields: [trainerId], references: [id])
+  category     Category       @relation(fields: [categoryId], references: [id])
+  applications Application[]
+  completedTrainings CompletedTraining[]
+  reports      Report[]
+
+  @@map("trainings")
+}
+
+model Application {
+  id         String            @id @default(cuid())
+  trainingId String
+  userId     String?
+  name       String
+  email      String
+  phone      String
+  message    String?
+  status     ApplicationStatus @default(PENDING)
+  feedback   String?
+  rating     Int?
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+
+  // Relations
+  training Training @relation(fields: [trainingId], references: [id], onDelete: Cascade)
+  user     User?    @relation(fields: [userId], references: [id])
+
+  @@map("applications")
+}
+
+model CompletedTraining {
+  id         String   @id @default(cuid())
+  userId     String
+  trainingId String
+  completedAt DateTime @default(now())
+  certificateUrl String?
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id])
+  training Training @relation(fields: [trainingId], references: [id])
+
+  @@map("completed_trainings")
+}
+
+model Report {
+  id         String   @id @default(cuid())
+  trainerId  String
+  trainingId String
+  title      String
+  content    String
+  createdAt  DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  trainer  Trainer  @relation(fields: [trainerId], references: [id])
+  training Training @relation(fields: [trainingId], references: [id])
+
+  @@map("reports")
+}
+
+enum UserRole {
+  USER
+  TRAINER
+  ADMIN
+}
+
+enum TrainingType {
+  ONLINE
+  PHYSICAL
+  HYBRID
+}
+
+enum ApplicationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  COMPLETED
+}

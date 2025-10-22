@@ -3,20 +3,51 @@
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ArrowRight, Play, Sparkles, Zap, Brain } from "lucide-react";
+import { ArrowRight, Play, Sparkles, Zap, Brain, Cpu, CircuitBoard, BarChart3, TrendingUp, Database, Bot, CpuIcon } from "lucide-react";
 import Link from "next/link";
 
 export function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* AI Background Images */}
-      <div className="absolute inset-0 bg-gradient-hero">
-        {/* AI Neural Network Background */}
-        <div className="absolute inset-0 opacity-20">
-          <div className="absolute inset-0 bg-[url('/ai-neural-network.jpg')] bg-cover bg-center bg-no-repeat" />
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-purple-900/80 to-indigo-900/80" />
+      {/* Enhanced AI Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+        {/* AI Circuit Board Pattern */}
+        <div className="absolute inset-0 opacity-30">
+          <svg className="w-full h-full" viewBox="0 0 1000 1000" fill="none">
+            {/* Circuit Lines */}
+            <motion.path
+              d="M100,200 L300,200 L300,400 L500,400 L500,600 L700,600 L700,300 L900,300"
+              stroke="url(#circuitGradient)"
+              strokeWidth="2"
+              fill="none"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+            />
+            <motion.path
+              d="M200,100 L200,300 L400,300 L400,500 L600,500 L600,700 L800,700"
+              stroke="url(#circuitGradient2)"
+              strokeWidth="2"
+              fill="none"
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 4, repeat: Infinity, repeatType: "reverse", delay: 1 }}
+            />
+            <defs>
+              <linearGradient id="circuitGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
+                <stop offset="50%" stopColor="#8b5cf6" stopOpacity="0.6" />
+                <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8" />
+              </linearGradient>
+              <linearGradient id="circuitGradient2" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.6" />
+                <stop offset="50%" stopColor="#ec4899" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#f59e0b" stopOpacity="0.6" />
+              </linearGradient>
+            </defs>
+          </svg>
         </div>
-        
+
         {/* Animated AI Elements */}
         <div className="absolute inset-0">
           {/* Neural Network Nodes */}
@@ -85,6 +116,119 @@ export function Hero() {
               ease: "easeInOut",
             }}
           />
+
+          {/* Robotics Elements */}
+          <motion.div
+            className="absolute top-1/3 left-1/4 w-16 h-16"
+            animate={{
+              rotate: [0, 360],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            <Bot className="w-full h-full text-cyan-400/40" />
+          </motion.div>
+
+          <motion.div
+            className="absolute bottom-1/4 right-1/3 w-12 h-12"
+            animate={{
+              y: [0, -10, 0],
+              rotate: [0, 180, 360],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <Cpu className="w-full h-full text-purple-400/40" />
+          </motion.div>
+
+          {/* Data Science Charts */}
+          <motion.div
+            className="absolute top-1/2 right-1/4 w-20 h-20"
+            animate={{
+              scale: [1, 1.2, 1],
+              opacity: [0.3, 0.7, 0.3],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <BarChart3 className="w-full h-full text-green-400/40" />
+          </motion.div>
+
+          <motion.div
+            className="absolute bottom-1/2 left-1/5 w-14 h-14"
+            animate={{
+              rotate: [0, 90, 0],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <TrendingUp className="w-full h-full text-yellow-400/40" />
+          </motion.div>
+
+          <motion.div
+            className="absolute top-1/5 right-1/5 w-18 h-18"
+            animate={{
+              y: [0, -15, 0],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: 7,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <Database className="w-full h-full text-pink-400/40" />
+          </motion.div>
+
+          {/* Circuit Board Elements */}
+          <motion.div
+            className="absolute top-1/6 left-1/6 w-24 h-16 border border-cyan-400/20 rounded"
+            animate={{
+              opacity: [0.2, 0.6, 0.2],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <div className="w-full h-full bg-gradient-to-r from-cyan-400/10 to-blue-400/10 rounded flex items-center justify-center">
+              <CircuitBoard className="w-8 h-8 text-cyan-400/30" />
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="absolute bottom-1/6 right-1/6 w-20 h-12 border border-purple-400/20 rounded"
+            animate={{
+              opacity: [0.3, 0.8, 0.3],
+              scale: [1, 1.1, 1],
+            }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: 1,
+            }}
+          >
+            <div className="w-full h-full bg-gradient-to-r from-purple-400/10 to-pink-400/10 rounded flex items-center justify-center">
+              <CpuIcon className="w-6 h-6 text-purple-400/30" />
+            </div>
+          </motion.div>
         </div>
       </div>
 
