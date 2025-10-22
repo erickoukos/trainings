@@ -34,7 +34,8 @@ import {
   ArrowRight,
   Play,
   Pause,
-  BarChart3
+  BarChart3,
+  MapPin
 } from "lucide-react";
 import Link from "next/link";
 import { getClientSession } from "@/lib/client-session";
