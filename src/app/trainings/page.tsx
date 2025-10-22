@@ -42,7 +42,7 @@ const trainings = [
     seatsLimit: 50,
     seatsTaken: 0,
     category: { name: "AI & Entrepreneurship" },
-    trainer: { name: "Lish AI Labs Team", avatar: "/avatars/lish-team.jpg" },
+    trainer: { name: "Collins Emmanuel & Sheila Chebii", avatar: "/avatars/collins-sheila.jpg" },
     rating: 0,
     reviews: 0,
     duration: "5 Days",
@@ -63,7 +63,7 @@ const trainings = [
     seatsLimit: 30,
     seatsTaken: 0,
     category: { name: "AI & Entrepreneurship" },
-    trainer: { name: "Lish AI Labs Team", avatar: "/avatars/lish-team.jpg" },
+    trainer: { name: "Kenneth Muchiri & Michael Kimani", avatar: "/avatars/kenneth-michael.jpg" },
     rating: 0,
     reviews: 0,
     duration: "5 Days",
@@ -84,7 +84,7 @@ const trainings = [
     seatsLimit: 25,
     seatsTaken: 0,
     category: { name: "AI & Machine Learning" },
-    trainer: { name: "Lish AI Labs Experts", avatar: "/avatars/lish-experts.jpg" },
+    trainer: { name: "Ron Moen & Rukia Hassan", avatar: "/avatars/ron-rukia.jpg" },
     rating: 0,
     reviews: 0,
     duration: "Intensive Program",
@@ -101,11 +101,11 @@ const trainings = [
     endDate: "2024-12-28",
     trainingType: "HYBRID",
     isPaid: true,
-    price: 0, // Contact for pricing
+    price: null, // TBD - To be decided
     seatsLimit: 20,
     seatsTaken: 0,
     category: { name: "Data Science" },
-    trainer: { name: "Lish AI Labs Data Team", avatar: "/avatars/lish-data.jpg" },
+    trainer: { name: "Erick Ouko N. (CTO)", avatar: "/avatars/erick.jpg" },
     rating: 0,
     reviews: 0,
     duration: "4 Weeks",
@@ -122,11 +122,11 @@ const trainings = [
     endDate: "2024-12-29",
     trainingType: "PHYSICAL",
     isPaid: true,
-    price: 0, // Contact for pricing
+    price: null, // TBD - To be decided
     seatsLimit: 15,
     seatsTaken: 0,
     category: { name: "Security Technology" },
-    trainer: { name: "Lish AI Labs Security Team", avatar: "/avatars/lish-security.jpg" },
+    trainer: { name: "Erick Ouko N. (CTO)", avatar: "/avatars/erick.jpg" },
     rating: 0,
     reviews: 0,
     duration: "2 Weeks",
@@ -490,7 +490,7 @@ export default function TrainingsPage() {
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div>
                         <span className="text-2xl font-bold text-gradient-primary">
-                          {training.isPaid ? (training.price === 0 ? "Contact for Pricing" : `KSH ${training.price?.toLocaleString()}`) : "Free"}
+                          {training.isPaid ? (training.price === null ? "TBD - To be decided" : `KES ${training.price?.toLocaleString()}`) : "Free"}
                         </span>
                       </div>
                       <Link href={`/trainings/${training.id}`}>
@@ -570,7 +570,7 @@ export default function TrainingsPage() {
                         <div className="flex flex-col items-end gap-4">
                           <div className="text-right">
                             <div className="text-2xl font-bold text-gradient-primary">
-                              {training.isPaid ? (training.price === 0 ? "Contact for Pricing" : `KSH ${training.price?.toLocaleString()}`) : "Free"}
+                              {training.isPaid ? (training.price === null ? "TBD - To be decided" : `KES ${training.price?.toLocaleString()}`) : "Free"}
                             </div>
                           </div>
                           <Link href={`/trainings/${training.id}`}>

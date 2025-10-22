@@ -1,512 +1,677 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Header } from "@/components/ui/header";
 import { Footer } from "@/components/ui/footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   Calendar,
-  MapPin,
-  Users,
   Clock,
+  Users,
+  MapPin,
   Star,
-  ArrowRight,
+  ArrowLeft,
+  CheckCircle,
+  AlertCircle,
+  CreditCard,
+  Smartphone,
+  Mail,
+  Phone,
+  User,
+  FileText,
+  Shield,
+  Award,
   BookOpen,
   GraduationCap,
-  CheckCircle,
-  Play,
-  Download,
-  Share2,
-  Heart,
-  TrendingUp,
-  Sparkles,
-  Award,
-  User,
-  MessageCircle,
-  ThumbsUp
+  Zap,
+  Brain
 } from "lucide-react";
 import Link from "next/link";
 
-// Mock data - in real app, this would come from API
-const training = {
-  id: "1",
-  title: "Advanced AI & Machine Learning",
-  description: "Master cutting-edge AI and ML techniques for real-world applications. Learn from industry experts and build production-ready models that solve complex business problems.",
-  longDescription: "This comprehensive program covers the latest developments in artificial intelligence and machine learning. You'll learn advanced techniques including deep learning, neural networks, natural language processing, computer vision, and reinforcement learning. The course includes hands-on projects, real-world case studies, and industry best practices.",
-  beginDate: "2024-02-01",
-  endDate: "2024-02-14",
-  trainingType: "ONLINE",
-  isPaid: true,
-  price: 1200,
-  seatsLimit: 25,
-  seatsTaken: 12,
-  category: { name: "AI & ML" },
-  trainer: { 
-    name: "Dr. Sarah Chen", 
-    avatar: "/avatars/sarah.jpg",
-    bio: "Senior AI Researcher with 10+ years experience at leading tech companies",
-    rating: 4.9,
-    students: 2500
+// Mock training data - in production, this would come from API
+const trainingData = {
+  "ai-4-youth": {
+    id: "ai-4-youth",
+    title: "AI-4-YOUTH TRAINING",
+    description: "Youth Empowerment in Artificial Intelligence (AI) Skills for Entrepreneurship. Learn how to leverage AI to start, market, run, and grow your business.",
+    beginDate: "2024-11-10",
+    endDate: "2024-11-14",
+    trainingType: "ONLINE",
+    isPaid: true,
+    price: 1500,
+    seatsLimit: 50,
+    seatsTaken: 0,
+    category: { name: "AI & Entrepreneurship" },
+    trainer: { name: "Collins Emmanuel & Sheila Chebii", avatar: "/avatars/collins-sheila.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "5 Days",
+    level: "Beginner",
+    trending: true,
+    new: true,
+    image: "/trainings/ai-4-youth.jpg",
+    curriculum: [
+      "Day 1: AI to Start a Business",
+      "Day 2: AI to Market a Business", 
+      "Day 3: AI to Run a Business",
+      "Day 4: AI to Grow a Business",
+      "Day 5: AI Agents for Business"
+    ],
+    requirements: [
+      "Basic computer skills",
+      "Internet connection",
+      "Laptop or smartphone",
+      "Passion for entrepreneurship"
+    ],
+    benefits: [
+      "Hands-on AI tools training",
+      "Business case studies",
+      "Entrepreneurship mentorship",
+      "Certificate of completion",
+      "Networking opportunities"
+    ]
   },
-  rating: 4.9,
-  reviews: 250,
-  duration: "2 weeks",
-  level: "Advanced",
-  trending: true,
-  new: false,
-  image: "/trainings/ai-ml.jpg",
-  curriculum: [
-    { week: 1, title: "Introduction to AI & ML", topics: ["AI Fundamentals", "ML Algorithms", "Data Preprocessing"] },
-    { week: 2, title: "Deep Learning", topics: ["Neural Networks", "CNN", "RNN", "Transformers"] },
-    { week: 3, title: "Advanced Topics", topics: ["NLP", "Computer Vision", "Reinforcement Learning"] },
-    { week: 4, title: "Real-world Projects", topics: ["Capstone Project", "Model Deployment", "Performance Optimization"] }
-  ],
-  requirements: [
-    "Basic programming knowledge (Python recommended)",
-    "Understanding of statistics and linear algebra",
-    "Laptop with Python 3.7+ installed",
-    "Basic understanding of data structures"
-  ],
-  whatYouWillLearn: [
-    "Build and train neural networks from scratch",
-    "Implement advanced ML algorithms",
-    "Work with real-world datasets",
-    "Deploy ML models to production",
-    "Optimize model performance",
-    "Apply AI to solve business problems"
-  ],
-  relatedTrainings: [
-    {
-      id: "2",
-      title: "Data Science Fundamentals",
-      price: 800,
-      rating: 4.6,
-      image: "/trainings/data-science.jpg"
-    },
-    {
-      id: "3",
-      title: "Deep Learning Specialization",
-      price: 1500,
-      rating: 4.8,
-      image: "/trainings/deep-learning.jpg"
-    }
-  ]
+  "ai-4-bodaboda": {
+    id: "ai-4-bodaboda",
+    title: "AI-4-BODABODA TRAINING",
+    description: "Bodaboda Empowerment in Artificial Intelligence (AI) Skills for Entrepreneurship. Specialized training for bodaboda operators to learn AI skills for business growth.",
+    beginDate: "2024-11-10",
+    endDate: "2024-11-14",
+    trainingType: "ONLINE",
+    isPaid: true,
+    price: 500,
+    seatsLimit: 30,
+    seatsTaken: 0,
+    category: { name: "AI & Entrepreneurship" },
+    trainer: { name: "Kenneth Muchiri & Michael Kimani", avatar: "/avatars/kenneth-michael.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "5 Days",
+    level: "Beginner",
+    trending: true,
+    new: true,
+    image: "/trainings/ai-4-bodaboda.jpg",
+    curriculum: [
+      "Day 1: AI to Start a Business",
+      "Day 2: AI to Market a Business",
+      "Day 3: AI to Run a Business", 
+      "Day 4: AI to Grow a Business",
+      "Day 5: AI Agents for Business"
+    ],
+    requirements: [
+      "Mobile phone with internet",
+      "Basic smartphone skills",
+      "Bodaboda operator experience",
+      "Interest in business growth"
+    ],
+    benefits: [
+      "Mobile-friendly learning",
+      "Practical business applications",
+      "Digital marketing with AI",
+      "Financial management tools",
+      "Community support network"
+    ]
+  },
+  "ai-masterclass": {
+    id: "ai-masterclass",
+    title: "AI Masterclass",
+    description: "From FOUNDATIONAL PRINCIPLES to PROFESSIONAL MASTERY. Comprehensive AI masterclass covering foundational principles to professional mastery.",
+    beginDate: "2024-11-03",
+    endDate: "2024-11-10",
+    trainingType: "ONLINE",
+    isPaid: true,
+    price: 0, // Contact for pricing
+    seatsLimit: 25,
+    seatsTaken: 0,
+    category: { name: "AI & Machine Learning" },
+    trainer: { name: "Ron Moen & Rukia Hassan", avatar: "/avatars/ron-rukia.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "Intensive Program",
+    level: "Advanced",
+    trending: true,
+    new: true,
+    image: "/trainings/ai-masterclass.jpg",
+    curriculum: [
+      "Design effective prompts to guide AI tone and output",
+      "Provide context to ensure factual accuracy",
+      "Use iterative steps to improve AI results",
+      "Apply AI skills in professional tasks",
+      "Review AI output for bias and accuracy",
+      "Practice ethical and responsible AI use"
+    ],
+    requirements: [
+      "Professional experience",
+      "Basic understanding of AI concepts",
+      "Laptop with stable internet",
+      "Commitment to intensive learning"
+    ],
+    benefits: [
+      "Advanced AI techniques",
+      "Professional certification",
+      "Industry networking",
+      "Career advancement",
+      "Expert mentorship"
+    ]
+  },
+  "data-science": {
+    id: "data-science",
+    title: "Data Science Fundamentals",
+    description: "Comprehensive data analysis and machine learning with Python. Master data science fundamentals with hands-on programming.",
+    beginDate: "2024-12-01",
+    endDate: "2024-12-28",
+    trainingType: "HYBRID",
+    isPaid: true,
+    price: null, // TBD
+    seatsLimit: 20,
+    seatsTaken: 0,
+    category: { name: "Data Science" },
+    trainer: { name: "Erick Ouko N. (CTO) & Collins Emmanuel", avatar: "/avatars/erick-collins.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "4 Weeks",
+    level: "Intermediate",
+    trending: false,
+    new: true,
+    image: "/trainings/data-science.jpg",
+    curriculum: [
+      "Python for Data Science",
+      "Statistical Analysis",
+      "Machine Learning Algorithms",
+      "Data Visualization",
+      "Big Data Processing",
+      "Real-world Projects"
+    ],
+    requirements: [
+      "Basic programming knowledge",
+      "Laptop with Python installed",
+      "Mathematical background",
+      "4-week commitment"
+    ],
+    benefits: [
+      "Industry-relevant skills",
+      "Portfolio projects",
+      "Mentorship from CTO",
+      "Career guidance",
+      "Certificate of completion"
+    ]
+  },
+  "dahua-surveillance": {
+    id: "dahua-surveillance",
+    title: "Dahua Surveillance Technology",
+    description: "Professional surveillance systems and security technology training. Comprehensive training on Dahua surveillance technology.",
+    beginDate: "2024-12-15",
+    endDate: "2024-12-29",
+    trainingType: "PHYSICAL",
+    isPaid: true,
+    price: null, // TBD
+    seatsLimit: 15,
+    seatsTaken: 0,
+    category: { name: "Security Technology" },
+    trainer: { name: "Erick Ouko N. (CTO)", avatar: "/avatars/erick.jpg" },
+    rating: 0,
+    reviews: 0,
+    duration: "2 Weeks",
+    level: "Intermediate",
+    trending: false,
+    new: true,
+    image: "/trainings/dahua-surveillance.jpg",
+    curriculum: [
+      "Dahua Camera Systems",
+      "Network Configuration",
+      "Remote Monitoring",
+      "Security Protocols",
+      "System Integration",
+      "Maintenance & Troubleshooting"
+    ],
+    requirements: [
+      "Technical background preferred",
+      "Physical attendance required",
+      "Basic networking knowledge",
+      "2-week commitment"
+    ],
+    benefits: [
+      "Hands-on equipment training",
+      "Industry certification",
+      "Professional networking",
+      "Career opportunities",
+      "Expert instruction"
+    ]
+  }
 };
 
-const reviews = [
-  {
-    id: 1,
-    user: "John Doe",
-    rating: 5,
-    comment: "Excellent course! The instructor is very knowledgeable and the content is up-to-date with industry standards.",
-    date: "2024-01-15",
-    helpful: 12
-  },
-  {
-    id: 2,
-    user: "Jane Smith",
-    rating: 5,
-    comment: "This course transformed my understanding of AI. The hands-on projects were incredibly valuable.",
-    date: "2024-01-10",
-    helpful: 8
-  },
-  {
-    id: 3,
-    user: "Mike Johnson",
-    rating: 4,
-    comment: "Great content and structure. Would recommend to anyone serious about learning AI.",
-    date: "2024-01-05",
-    helpful: 5
-  }
-];
-
 export default function TrainingDetailPage({ params }: { params: { id: string } }) {
-  const [isEnrolled, setIsEnrolled] = useState(false);
-  const [isFavorited, setIsFavorited] = useState(false);
+  const [training, setTraining] = useState<any>(null);
+  const [showApplicationForm, setShowApplicationForm] = useState(false);
+  const [applicationData, setApplicationData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+    paymentMethod: "mpesa",
+    transactionCode: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
 
-  const handleEnroll = () => {
-    setIsEnrolled(true);
-    // In real app, this would redirect to payment or enrollment process
+  useEffect(() => {
+    const trainingInfo = trainingData[params.id as keyof typeof trainingData];
+    if (trainingInfo) {
+      setTraining(trainingInfo);
+    }
+  }, [params.id]);
+
+  const handleApplicationSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch('/api/applications', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          trainingId: training.id,
+          ...applicationData
+        }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setSuccess(true);
+        setShowApplicationForm(false);
+      } else {
+        setError(data.error || "Application failed. Please try again.");
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleShare = () => {
-    // In real app, this would implement sharing functionality
-    navigator.clipboard.writeText(window.location.href);
-  };
+  if (!training) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading training details...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <Header />
       
-      {/* Hero Section */}
-      <section className="bg-gradient-primary text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div className="flex flex-col lg:flex-row gap-8 items-start">
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-4">
-                  <Badge className="bg-white/20 text-white">
-                    {training.category.name}
-                  </Badge>
-                  <Badge className="bg-white/20 text-white">
-                    {training.level}
-                  </Badge>
-                  {training.trending && (
-                    <Badge className="bg-orange-500 text-white">
-                      <TrendingUp className="h-3 w-3 mr-1" />
-                      Trending
-                    </Badge>
-                  )}
-                </div>
-                
-                <h1 className="text-4xl md:text-5xl font-display font-bold mb-6">
-                  {training.title}
-                </h1>
-                
-                <p className="text-xl text-white/90 mb-8 max-w-3xl">
-                  {training.description}
-                </p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="mb-8">
+            <Link href="/trainings" className="inline-flex items-center text-blue-600 hover:text-blue-700 mb-6">
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Trainings
+            </Link>
+          </div>
 
-                <div className="flex flex-wrap gap-6 text-white/90 mb-8">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
-                    <span>{new Date(training.beginDate).toLocaleDateString()} - {new Date(training.endDate).toLocaleDateString()}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-5 w-5" />
-                    <span>{training.duration}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Users className="h-5 w-5" />
-                    <span>{training.seatsTaken}/{training.seatsLimit} enrolled</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Star className="h-5 w-5 fill-current" />
-                    <span>{training.rating} ({training.reviews} reviews)</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-wrap gap-4">
-                  <Button 
-                    size="lg" 
-                    className="bg-white text-primary hover:bg-white/90"
-                    onClick={handleEnroll}
-                    disabled={isEnrolled}
-                  >
-                    {isEnrolled ? "Enrolled" : "Enroll Now"}
-                    <ArrowRight className="h-5 w-5 ml-2" />
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="border-white text-white hover:bg-white/10"
-                  >
-                    <Play className="h-5 w-5 mr-2" />
-                    Preview
-                  </Button>
-                  <Button 
-                    size="lg" 
-                    variant="outline" 
-                    className="border-white text-white hover:bg-white/10"
-                    onClick={() => setIsFavorited(!isFavorited)}
-                  >
-                    <Heart className={`h-5 w-5 mr-2 ${isFavorited ? "fill-current" : ""}`} />
-                    {isFavorited ? "Favorited" : "Add to Favorites"}
-                  </Button>
-                </div>
-              </div>
-
-              {/* Enrollment Card */}
-              <div className="lg:w-80">
-                <Card className="glass border-white/20">
-                  <CardHeader>
-                    <div className="text-center">
-                      <div className="text-3xl font-bold text-white mb-2">
-                        {training.isPaid ? `$${training.price?.toLocaleString()}` : "Free"}
-                      </div>
-                      <p className="text-white/80">One-time payment</p>
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Training Header */}
+              <Card className="shadow-lg">
+                <CardContent className="p-8">
+                  <div className="flex items-start justify-between mb-6">
+                    <div>
+                      <Badge className="mb-4 bg-blue-100 text-blue-800">
+                        {training.category.name}
+                      </Badge>
+                      <h1 className="text-3xl font-bold text-gray-900 mb-4">{training.title}</h1>
+                      <p className="text-lg text-gray-700 mb-6">{training.description}</p>
                     </div>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    <div className="space-y-2 text-sm text-white/90">
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4" />
-                        <span>Lifetime access</span>
+                    <div className="text-right">
+                      <div className="text-3xl font-bold text-blue-600 mb-2">
+                        {training.isPaid ? (training.price === null ? "TBD - To be decided" : `KES ${training.price?.toLocaleString()}`) : "Free"}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4" />
-                        <span>Certificate of completion</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <CheckCircle className="h-4 w-4" />
-                        <span>30-day money-back guarantee</span>
+                      <div className="text-sm text-gray-600">
+                        {training.seatsLimit - training.seatsTaken} seats remaining
                       </div>
                     </div>
-                    
+                  </div>
+
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                    <div className="flex items-center text-gray-600">
+                      <Calendar className="h-5 w-5 mr-2 text-blue-600" />
+                      <div>
+                        <div className="text-sm font-medium">Start Date</div>
+                        <div className="text-sm">{new Date(training.beginDate).toLocaleDateString()}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <Clock className="h-5 w-5 mr-2 text-blue-600" />
+                      <div>
+                        <div className="text-sm font-medium">Duration</div>
+                        <div className="text-sm">{training.duration}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <Users className="h-5 w-5 mr-2 text-blue-600" />
+                      <div>
+                        <div className="text-sm font-medium">Format</div>
+                        <div className="text-sm">{training.trainingType}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center text-gray-600">
+                      <Award className="h-5 w-5 mr-2 text-blue-600" />
+                      <div>
+                        <div className="text-sm font-medium">Level</div>
+                        <div className="text-sm">{training.level}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
                     <Button 
-                      className="w-full bg-white text-primary hover:bg-white/90"
-                      onClick={handleEnroll}
-                      disabled={isEnrolled}
+                      onClick={() => setShowApplicationForm(true)}
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-8 py-3"
                     >
-                      {isEnrolled ? "Enrolled" : "Enroll Now"}
+                      <FileText className="h-5 w-5 mr-2" />
+                      Apply Now
                     </Button>
-                    
-                    <div className="text-center">
-                      <Button variant="ghost" className="text-white/80 hover:text-white">
-                        <Share2 className="h-4 w-4 mr-2" />
-                        Share
-                      </Button>
+                    <Button variant="outline" className="px-8 py-3">
+                      <Mail className="h-5 w-5 mr-2" />
+                      Contact Trainer
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Curriculum */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BookOpen className="h-5 w-5 mr-2 text-blue-600" />
+                    Curriculum
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {training.curriculum.map((item: string, index: number) => (
+                      <div key={index} className="flex items-center p-3 bg-gray-50 rounded-lg">
+                        <CheckCircle className="h-5 w-5 text-green-600 mr-3" />
+                        <span className="text-gray-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Requirements */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <Shield className="h-5 w-5 mr-2 text-blue-600" />
+                    Requirements
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {training.requirements.map((item: string, index: number) => (
+                      <div key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-blue-600 rounded-full mr-3"></div>
+                        <span className="text-gray-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Benefits */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <GraduationCap className="h-5 w-5 mr-2 text-blue-600" />
+                    What You'll Learn
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {training.benefits.map((item: string, index: number) => (
+                      <div key={index} className="flex items-center p-3 bg-green-50 rounded-lg">
+                        <Zap className="h-5 w-5 text-green-600 mr-3" />
+                        <span className="text-gray-700">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Sidebar */}
+            <div className="space-y-6">
+              {/* Trainer Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <User className="h-5 w-5 mr-2 text-blue-600" />
+                    Trainer
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-bold text-xl mx-auto mb-4">
+                      {training.trainer.name.split(' ').map((n: string) => n[0]).join('')}
                     </div>
-                  </CardContent>
-                </Card>
+                    <h3 className="font-semibold text-gray-900 mb-2">{training.trainer.name}</h3>
+                    <p className="text-sm text-gray-600 mb-4">Expert Instructor</p>
+                    <Button variant="outline" size="sm" className="w-full">
+                      <Mail className="h-4 w-4 mr-2" />
+                      Contact
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Quick Info */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Quick Info</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Seats Available:</span>
+                    <span className="font-semibold">{training.seatsLimit - training.seatsTaken}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Total Seats:</span>
+                    <span className="font-semibold">{training.seatsLimit}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Format:</span>
+                    <span className="font-semibold">{training.trainingType}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Level:</span>
+                    <span className="font-semibold">{training.level}</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Application Modal */}
+      {showApplicationForm && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto"
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold text-gray-900">Apply for Training</h2>
+                <button
+                  onClick={() => setShowApplicationForm(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  ×
+                </button>
               </div>
+
+              {success ? (
+                <div className="text-center py-8">
+                  <CheckCircle className="h-16 w-16 text-green-600 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Application Submitted!</h3>
+                  <p className="text-gray-600 mb-4">
+                    Your application has been submitted successfully. We'll review it and get back to you soon.
+                  </p>
+                  <Button onClick={() => setShowApplicationForm(false)} className="w-full">
+                    Close
+                  </Button>
+                </div>
+              ) : (
+                <form onSubmit={handleApplicationSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Full Name *</Label>
+                    <Input
+                      id="name"
+                      value={applicationData.name}
+                      onChange={(e) => setApplicationData({...applicationData, name: e.target.value})}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="email">Email Address *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={applicationData.email}
+                      onChange={(e) => setApplicationData({...applicationData, email: e.target.value})}
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="phone">Phone Number *</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      value={applicationData.phone}
+                      onChange={(e) => setApplicationData({...applicationData, phone: e.target.value})}
+                      placeholder="+254 700 000 000"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <Label htmlFor="message">Message (Optional)</Label>
+                    <textarea
+                      id="message"
+                      value={applicationData.message}
+                      onChange={(e) => setApplicationData({...applicationData, message: e.target.value})}
+                      rows={3}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                  </div>
+
+                  {training.isPaid && training.price !== null && (
+                    <div>
+                      <Label>Payment Method</Label>
+                      <div className="space-y-3 mt-2">
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="mpesa"
+                            checked={applicationData.paymentMethod === "mpesa"}
+                            onChange={(e) => setApplicationData({...applicationData, paymentMethod: e.target.value})}
+                            className="mr-2"
+                          />
+                          <div className="flex items-center">
+                            <Smartphone className="h-5 w-5 mr-2 text-green-600" />
+                            <span>MPESA</span>
+                          </div>
+                        </label>
+                        <label className="flex items-center">
+                          <input
+                            type="radio"
+                            name="paymentMethod"
+                            value="bank"
+                            checked={applicationData.paymentMethod === "bank"}
+                            onChange={(e) => setApplicationData({...applicationData, paymentMethod: e.target.value})}
+                            className="mr-2"
+                          />
+                          <div className="flex items-center">
+                            <CreditCard className="h-5 w-5 mr-2 text-blue-600" />
+                            <span>Bank Transfer</span>
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  )}
+
+                  {applicationData.paymentMethod === "mpesa" && training.isPaid && training.price !== null && (
+                    <div>
+                      <Label htmlFor="transactionCode">MPESA Transaction Code *</Label>
+                      <Input
+                        id="transactionCode"
+                        value={applicationData.transactionCode}
+                        onChange={(e) => setApplicationData({...applicationData, transactionCode: e.target.value})}
+                        placeholder="Enter MPESA transaction code"
+                        required
+                      />
+                      <p className="text-sm text-gray-600 mt-1">
+                        Pay KES {training.price} to MPESA TILL: 687 37 37, then enter the transaction code above.
+                      </p>
+                    </div>
+                  )}
+
+                  {error && (
+                    <Alert>
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>{error}</AlertDescription>
+                    </Alert>
+                  )}
+
+                  <div className="flex gap-3">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowApplicationForm(false)}
+                      className="flex-1"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                    >
+                      {loading ? "Submitting..." : "Submit Application"}
+                    </Button>
+                  </div>
+                </form>
+              )}
             </div>
           </motion.div>
         </div>
-      </section>
-
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column - Content */}
-          <div className="lg:col-span-2">
-            <Tabs defaultValue="overview" className="space-y-6">
-              <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="curriculum">Curriculum</TabsTrigger>
-                <TabsTrigger value="instructor">Instructor</TabsTrigger>
-                <TabsTrigger value="reviews">Reviews</TabsTrigger>
-              </TabsList>
-
-              {/* Overview Tab */}
-              <TabsContent value="overview" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>About This Training</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground leading-relaxed">
-                      {training.longDescription}
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>What You'll Learn</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {training.whatYouWillLearn.map((item, index) => (
-                        <div key={index} className="flex items-start gap-3">
-                          <CheckCircle className="h-5 w-5 text-green-500 mt-0.5 flex-shrink-0" />
-                          <span>{item}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Requirements</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-2">
-                      {training.requirements.map((req, index) => (
-                        <li key={index} className="flex items-start gap-3">
-                          <div className="w-2 h-2 bg-primary rounded-full mt-2 flex-shrink-0" />
-                          <span>{req}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Curriculum Tab */}
-              <TabsContent value="curriculum" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Training Curriculum</CardTitle>
-                    <CardDescription>
-                      {training.curriculum.length} weeks of comprehensive learning
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      {training.curriculum.map((week, index) => (
-                        <div key={index} className="border-l-2 border-primary/20 pl-6">
-                          <h4 className="font-semibold text-lg mb-2">
-                            Week {week.week}: {week.title}
-                          </h4>
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                            {week.topics.map((topic, topicIndex) => (
-                              <div key={topicIndex} className="flex items-center gap-2 text-sm text-muted-foreground">
-                                <BookOpen className="h-4 w-4" />
-                                <span>{topic}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Instructor Tab */}
-              <TabsContent value="instructor" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Meet Your Instructor</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="flex flex-col md:flex-row gap-6">
-                      <div className="w-24 h-24 bg-gradient-primary rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                        {training.trainer.name.split(' ').map(n => n[0]).join('')}
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-2xl font-semibold mb-2">{training.trainer.name}</h3>
-                        <p className="text-muted-foreground mb-4">{training.trainer.bio}</p>
-                        <div className="flex items-center gap-6 text-sm">
-                          <div className="flex items-center gap-2">
-                            <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                            <span>{training.trainer.rating} Instructor Rating</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <Users className="h-4 w-4" />
-                            <span>{training.trainer.students.toLocaleString()} Students</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-
-              {/* Reviews Tab */}
-              <TabsContent value="reviews" className="space-y-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Student Reviews</CardTitle>
-                    <CardDescription>
-                      {training.reviews} reviews with {training.rating} average rating
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-6">
-                      {reviews.map((review) => (
-                        <div key={review.id} className="border-b pb-6 last:border-b-0">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 bg-gradient-primary rounded-full flex items-center justify-center text-white text-sm font-medium">
-                                {review.user.split(' ').map(n => n[0]).join('')}
-                              </div>
-                              <div>
-                                <h4 className="font-medium">{review.user}</h4>
-                                <div className="flex items-center gap-1">
-                                  {[...Array(5)].map((_, i) => (
-                                    <Star
-                                      key={i}
-                                      className={`h-4 w-4 ${
-                                        i < review.rating
-                                          ? "text-yellow-400 fill-current"
-                                          : "text-gray-300"
-                                      }`}
-                                    />
-                                  ))}
-                                </div>
-                              </div>
-                            </div>
-                            <span className="text-sm text-muted-foreground">
-                              {new Date(review.date).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <p className="text-muted-foreground mb-3">{review.comment}</p>
-                          <div className="flex items-center gap-4 text-sm">
-                            <Button variant="ghost" size="sm" className="text-muted-foreground">
-                              <ThumbsUp className="h-4 w-4 mr-1" />
-                              Helpful ({review.helpful})
-                            </Button>
-                            <Button variant="ghost" size="sm" className="text-muted-foreground">
-                              <MessageCircle className="h-4 w-4 mr-1" />
-                              Reply
-                            </Button>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-
-          {/* Right Column - Sidebar */}
-          <div className="space-y-6">
-            {/* Related Trainings */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Related Trainings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {training.relatedTrainings.map((related) => (
-                  <div key={related.id} className="flex gap-3">
-                    <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-secondary/20 rounded-lg flex items-center justify-center">
-                      <GraduationCap className="h-6 w-6 text-primary" />
-                    </div>
-                    <div className="flex-1">
-                      <h4 className="font-medium text-sm mb-1">{related.title}</h4>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <Star className="h-3 w-3 text-yellow-400 fill-current" />
-                        <span>{related.rating}</span>
-                        <span>•</span>
-                        <span>${related.price}</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            {/* FAQ */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Frequently Asked Questions</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-medium text-sm mb-1">Can I get a refund?</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Yes, we offer a 30-day money-back guarantee.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-sm mb-1">Is there a certificate?</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Yes, you'll receive a certificate upon completion.
-                  </p>
-                </div>
-                <div>
-                  <h4 className="font-medium text-sm mb-1">Can I access materials later?</h4>
-                  <p className="text-xs text-muted-foreground">
-                    Yes, you have lifetime access to all materials.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </main>
+      )}
 
       <Footer />
     </div>

@@ -52,7 +52,7 @@ import { getClientSession } from "@/lib/client-session";
 const stats = {
   totalTrainings: 5,
   activeTrainings: 4,
-  totalUsers: 500,
+  totalUsers: 100000, // Expected trainees
   totalApplications: 89,
   pendingApplications: 12,
   completedTrainings: 6,
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-blue-100 text-sm font-medium">Total Revenue</p>
-                  <p className="text-3xl font-bold">KSH {stats.totalRevenue.toLocaleString()}</p>
+                  <p className="text-3xl font-bold">KES {stats.totalRevenue.toLocaleString()}</p>
                   <div className="flex items-center mt-2">
                     <ArrowUp className="h-4 w-4 text-green-300 mr-1" />
                     <span className="text-green-300 text-sm">+{stats.growthRate}%</span>
@@ -424,7 +424,7 @@ export default function AdminDashboard() {
                       </div>
                       <div className="flex items-center text-sm text-gray-600">
                         <DollarSign className="h-4 w-4 mr-2" />
-                        Revenue: KSH {training.revenue.toLocaleString()}
+                        Revenue: KES {training.revenue.toLocaleString()}
                       </div>
                     </div>
                     <div className="mt-4">

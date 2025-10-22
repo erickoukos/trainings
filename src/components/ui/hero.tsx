@@ -154,7 +154,7 @@ export function Hero() {
         >
           {[
             { number: "5+", label: "AI Training Programs", icon: Brain },
-            { number: "500+", label: "Professionals Trained", icon: Zap },
+            { number: "100K+", label: "Expected Trainees", icon: Zap },
             { number: "10+", label: "Expert Instructors", icon: Sparkles },
             { number: "98%", label: "Success Rate", icon: ArrowRight },
           ].map((stat, index) => (

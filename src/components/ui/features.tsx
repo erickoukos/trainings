@@ -160,12 +160,6 @@ export function Features() {
             >
               <img src="/ACAT-logo2.png" alt="ACAT" className="max-h-12 object-contain" />
             </motion.div>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              className="flex items-center justify-center w-24 h-16 bg-white rounded-lg shadow-sm p-2"
-            >
-              <img src="/lish_ai_logo.jpg" alt="Lish AI Labs" className="max-h-12 object-contain" />
-            </motion.div>
           </div>
         </motion.div>
       </div>
