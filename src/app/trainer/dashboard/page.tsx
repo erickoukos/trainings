@@ -37,7 +37,7 @@ import {
   BarChart3
 } from "lucide-react";
 import Link from "next/link";
-import { getSession } from "@/lib/session";
+import { getClientSession } from "@/lib/client-session";
 
 // Mock data - in real app, this would come from API
 const trainerStats = {
@@ -155,7 +155,7 @@ export default function TrainerDashboard() {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const session = await getSession();
+      const session = await getClientSession();
       if (!session || session.user.role !== "TRAINER") {
         router.push("/auth/signin");
       } else {

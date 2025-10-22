@@ -38,7 +38,7 @@ import {
   XCircle
 } from "lucide-react";
 import Link from "next/link";
-import { getSession } from "@/lib/session";
+import { getClientSession } from "@/lib/client-session";
 
 // Mock data - in real app, this would come from API
 const stats = {
@@ -146,7 +146,7 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const fetchSession = async () => {
-      const session = await getSession();
+      const session = await getClientSession();
       if (!session || session.user.role !== "ADMIN") {
         router.push("/auth/signin");
       } else {
