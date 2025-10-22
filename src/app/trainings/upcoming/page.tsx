@@ -32,7 +32,7 @@ const upcomingTrainings = [
     startDate: "November 10th, 2025",
     duration: "5 Days",
     format: "Online",
-    price: "KSH 1,500",
+    price: "KES 1,500",
     paymentMethod: "M-PESA TILL: 687 37 37",
     description: "Comprehensive 5-day program designed to empower youth with AI skills for entrepreneurship. Learn how to leverage AI to start, market, run, and grow your business.",
     curriculum: [
@@ -63,7 +63,7 @@ const upcomingTrainings = [
     startDate: "November 10th, 2025",
     duration: "5 Days",
     format: "Online",
-    price: "KSH 500",
+    price: "KES 500",
     paymentMethod: "M-PESA TILL: 687 37 37",
     description: "Specialized training program for bodaboda operators to learn AI skills for business growth and entrepreneurship opportunities.",
     curriculum: [
@@ -323,7 +323,7 @@ export default function UpcomingTrainingsPage() {
                   <div className="bg-gradient-to-br from-primary/10 to-secondary/10 p-8">
                     <div className="sticky top-8">
                       <h3 className="text-xl font-bold text-foreground mb-4">
-                        Register Now
+                        Apply Now
                       </h3>
                       
                       <div className="space-y-4 mb-6">
@@ -339,7 +339,7 @@ export default function UpcomingTrainingsPage() {
                         <div className="space-y-3">
                           <Button className="w-full bg-gradient-primary hover:opacity-90 text-white">
                             <BookOpen className="h-4 w-4 mr-2" />
-                            Register Now
+                            Apply Now
                             <ArrowRight className="h-4 w-4 ml-2" />
                           </Button>
                           <Button variant="outline" className="w-full">

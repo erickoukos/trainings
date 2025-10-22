@@ -546,99 +546,132 @@ export default function TrainingDetailPage({ params }: { params: { id: string } 
                 </div>
               ) : (
                 <form onSubmit={handleApplicationSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="name">Full Name *</Label>
-                    <Input
-                      id="name"
-                      value={applicationData.name}
-                      onChange={(e) => setApplicationData({...applicationData, name: e.target.value})}
-                      required
-                    />
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="name" className="text-sm font-semibold text-gray-700">Full Name *</Label>
+                      <Input
+                        id="name"
+                        value={applicationData.name}
+                        onChange={(e) => setApplicationData({...applicationData, name: e.target.value})}
+                        placeholder="Enter your full name"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label htmlFor="email" className="text-sm font-semibold text-gray-700">Email Address *</Label>
+                      <Input
+                        id="email"
+                        type="email"
+                        value={applicationData.email}
+                        onChange={(e) => setApplicationData({...applicationData, email: e.target.value})}
+                        placeholder="your.email@example.com"
+                        className="mt-1"
+                        required
+                      />
+                    </div>
                   </div>
 
                   <div>
-                    <Label htmlFor="email">Email Address *</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      value={applicationData.email}
-                      onChange={(e) => setApplicationData({...applicationData, email: e.target.value})}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="phone">Phone Number *</Label>
+                    <Label htmlFor="phone" className="text-sm font-semibold text-gray-700">Phone Number *</Label>
                     <Input
                       id="phone"
                       type="tel"
                       value={applicationData.phone}
                       onChange={(e) => setApplicationData({...applicationData, phone: e.target.value})}
                       placeholder="+254 700 000 000"
+                      className="mt-1"
                       required
                     />
+                    <p className="text-xs text-gray-500 mt-1">Include country code (e.g., +254 for Kenya)</p>
                   </div>
 
                   <div>
-                    <Label htmlFor="message">Message (Optional)</Label>
+                    <Label htmlFor="message" className="text-sm font-semibold text-gray-700">Additional Information</Label>
                     <textarea
                       id="message"
                       value={applicationData.message}
                       onChange={(e) => setApplicationData({...applicationData, message: e.target.value})}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      rows={4}
+                      placeholder="Tell us about your background, experience, or any specific questions you have about this training..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 mt-1"
                     />
+                    <p className="text-xs text-gray-500 mt-1">Optional: Share your background or any questions about the training</p>
                   </div>
 
                   {training.isPaid && training.price !== null && (
-                    <div>
-                      <Label>Payment Method</Label>
-                      <div className="space-y-3 mt-2">
-                        <label className="flex items-center">
+                    <div className="bg-gray-50 p-4 rounded-lg border">
+                      <Label className="text-sm font-semibold text-gray-700">Payment Method *</Label>
+                      <div className="space-y-3 mt-3">
+                        <label className="flex items-center p-3 bg-white rounded-lg border border-gray-200 hover:border-green-300 cursor-pointer transition-colors">
                           <input
                             type="radio"
                             name="paymentMethod"
                             value="mpesa"
                             checked={applicationData.paymentMethod === "mpesa"}
                             onChange={(e) => setApplicationData({...applicationData, paymentMethod: e.target.value})}
-                            className="mr-2"
+                            className="mr-3 text-green-600 focus:ring-green-500"
                           />
                           <div className="flex items-center">
                             <Smartphone className="h-5 w-5 mr-2 text-green-600" />
-                            <span>MPESA</span>
+                            <span className="font-medium">MPESA</span>
                           </div>
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center p-3 bg-white rounded-lg border border-gray-200 hover:border-blue-300 cursor-pointer transition-colors">
                           <input
                             type="radio"
                             name="paymentMethod"
                             value="bank"
                             checked={applicationData.paymentMethod === "bank"}
                             onChange={(e) => setApplicationData({...applicationData, paymentMethod: e.target.value})}
-                            className="mr-2"
+                            className="mr-3 text-blue-600 focus:ring-blue-500"
                           />
                           <div className="flex items-center">
                             <CreditCard className="h-5 w-5 mr-2 text-blue-600" />
-                            <span>Bank Transfer</span>
+                            <span className="font-medium">Bank Transfer</span>
                           </div>
                         </label>
                       </div>
                     </div>
                   )}
 
+                  {training.isPaid && training.price === null && (
+                    <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <div className="flex items-center">
+                        <AlertCircle className="h-5 w-5 text-blue-600 mr-2" />
+                        <div>
+                          <h4 className="font-semibold text-blue-900">Pricing To Be Determined</h4>
+                          <p className="text-sm text-blue-700 mt-1">
+                            The pricing for this training is still being finalized. We'll contact you with payment details once your application is approved.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
                   {applicationData.paymentMethod === "mpesa" && training.isPaid && training.price !== null && (
-                    <div>
-                      <Label htmlFor="transactionCode">MPESA Transaction Code *</Label>
+                    <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                      <Label htmlFor="transactionCode" className="text-sm font-semibold text-gray-700">MPESA Transaction Code *</Label>
                       <Input
                         id="transactionCode"
                         value={applicationData.transactionCode}
                         onChange={(e) => setApplicationData({...applicationData, transactionCode: e.target.value})}
-                        placeholder="Enter MPESA transaction code"
+                        placeholder="e.g., QGH123456789"
+                        className="mt-2"
                         required
                       />
-                      <p className="text-sm text-gray-600 mt-1">
-                        Pay KES {training.price} to MPESA TILL: 687 37 37, then enter the transaction code above.
-                      </p>
+                      <div className="mt-2 p-3 bg-white rounded border border-green-200">
+                        <p className="text-sm text-gray-700 font-medium">Payment Instructions:</p>
+                        <ol className="text-sm text-gray-600 mt-1 list-decimal list-inside space-y-1">
+                          <li>Go to M-PESA menu on your phone</li>
+                          <li>Select "Pay Bill"</li>
+                          <li>Enter Business Number: <span className="font-mono font-bold">687 37 37</span></li>
+                          <li>Enter Amount: <span className="font-bold">KES {training.price}</span></li>
+                          <li>Enter your phone number as account number</li>
+                          <li>Enter the transaction code above</li>
+                        </ol>
+                      </div>
                     </div>
                   )}
 
@@ -663,7 +696,7 @@ export default function TrainingDetailPage({ params }: { params: { id: string } 
                       disabled={loading}
                       className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
                     >
-                      {loading ? "Submitting..." : "Submit Application"}
+                      {loading ? "Submitting Application..." : "Apply Now"}
                     </Button>
                   </div>
                 </form>
