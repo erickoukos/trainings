@@ -35,7 +35,8 @@ import {
   Play,
   Pause,
   BarChart3,
-  MapPin
+  MapPin,
+  XCircle
 } from "lucide-react";
 import Link from "next/link";
 import { getClientSession } from "@/lib/client-session";
